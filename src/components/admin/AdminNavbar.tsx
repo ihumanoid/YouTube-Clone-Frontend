@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function AdminNavbar() {
+  const router = useRouter();
   const [keyword, setKeyword] = useState("");
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
 
   return (
     <div className="bg-black h-[10vh] flex justify-between">
@@ -12,17 +14,20 @@ function AdminNavbar() {
         YouTube
       </Link>
       {login ? (
-        <div className="flex items-center justify-between w-44 mr-8">
+        <div className="flex items-center justify-end w-44 mr-8">
           <button
             type="button"
             className="hover:font-bold"
-            onClick={() => setLogin(false)}
+            onClick={() => {
+              setLogin(false);
+              router.push("/");
+            }}
           >
             Log Out
           </button>
         </div>
       ) : (
-        <div className="flex items-center justify-end w-44  mr-8">
+        <div className="flex items-center justify-end w-44 mr-8">
           <button
             type="button"
             className="hover:font-bold"
