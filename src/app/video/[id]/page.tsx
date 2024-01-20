@@ -1,18 +1,25 @@
-import Navbar from "@/components/homepage/Navbar";
-import RecommendedVideos from "@/components/videodisplay/RecommendedVideos";
-import Video from "@/components/videodisplay/Video";
+import WatchList from "@/components/videodisplay/WatchList";
 import VideoDescription from "@/components/videodisplay/VideoDescription";
 import React from "react";
+import dynamic from "next/dynamic";
+import Navbar from "@/components/homepage/Navbar";
+
+const Video = dynamic(() => import("@/components/videodisplay/Video"), {
+  ssr: false,
+});
 
 function page({ params }: { params: { id: string } }) {
   return (
-    <div className="flex w-full h-full max-md:flex-col">
-      <div className="flex flex-col h-full w-full min-h-full">
-        <Video />
-        <VideoDescription />
+    <>
+      <Navbar />
+      <div className="flex w-full h-[90vh] max-md:flex-col">
+        <div className="flex flex-col h-full w-full">
+          <Video />
+          <VideoDescription />
+        </div>
+        <WatchList />
       </div>
-      <RecommendedVideos />
-    </div>
+    </>
   );
 }
 

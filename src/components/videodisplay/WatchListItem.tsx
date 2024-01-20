@@ -1,8 +1,8 @@
 import React from "react";
 
-function RecommendedVideoBox() {
+function WatchListItem() {
   return (
-    <div className="flex w-full">
+    <div className="flex w-full h-full">
       <div className="bg-black w-32 h-24 flex justify-center items-center">
         Image
       </div>
@@ -11,4 +11,4 @@ function RecommendedVideoBox() {
   );
 }
 
-export default RecommendedVideoBox;
+export default WatchListItem;

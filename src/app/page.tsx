@@ -4,8 +4,11 @@ import Feed from "../components/homepage/Feed";
 
 export default function Home() {
   return (
-    <div className="bg-slate-200 w-full h-full flex flex-col">
-      <Feed />
-    </div>
+    <>
+      <Navbar />
+      <div className="bg-slate-200 w-full h-[90vh] flex flex-col">
+        <Feed />
+      </div>
+    </>
   );
 }

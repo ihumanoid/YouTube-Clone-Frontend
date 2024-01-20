@@ -1,13 +1,11 @@
 import React from "react";
-import VideoCategory from "./VideoCategory";
+import WatchList from "./WatchListTitle";
 
 function Sidebar() {
   return (
     <div className="bg-green-500 w-28">
-      Video Categories{" "}
-      <div className="flex flex-col gap-3">
-        {Array(9).fill(<VideoCategory />)}
-      </div>
+      Watch Lists{" "}
+      <div className="flex flex-col gap-3">{Array(9).fill(<WatchList />)}</div>
     </div>
   );
 }
