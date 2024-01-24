@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 function AdminNavbar() {
   const router = useRouter();
-  const [keyword, setKeyword] = useState("");
   const [login, setLogin] = useState(true);
 
   return (
