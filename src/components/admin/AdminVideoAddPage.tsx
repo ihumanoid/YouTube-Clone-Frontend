@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import AdminVideoBox from "./AdminVideoBox";
 import Link from "next/link";
-import AdminVideoSearchBasket from "./AdminVideoSearchBasket";
 
 function AdminVideoAddPage() {
   const [keyword, setKeyword] = useState("");
-  const [searchResultVideos, setSearchResultVideos] = useState("");
 
   // const fetchVideos = async function () {
   //   const response = await fetch(
@@ -54,13 +52,9 @@ function AdminVideoAddPage() {
         </div>
       </div>
       <div className="flex h-full gap-16 justify-between mt-5 overflow-auto">
-        {searchResultVideos ? (
-          <AdminVideoSearchBasket videos={searchResultVideos} />
-        ) : (
-          <div className="bg-yellow-600 h-full w-full flex justify-center items-center font-bold text-2xl">
-            Search Result
-          </div>
-        )}
+        <div className="bg-yellow-600 h-full w-full flex justify-center items-center font-bold text-2xl">
+          Search Result
+        </div>
         <div className="bg-yellow-600 h-full w-full flex justify-center items-center font-bold text-2xl">
           Selected Videos
         </div>
