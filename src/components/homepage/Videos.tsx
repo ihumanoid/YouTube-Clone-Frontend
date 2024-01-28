@@ -1,10 +1,30 @@
+"use client";
 import React from "react";
 import VideoBox from "./VideoBox";
+import { useAppSelector } from "@/lib/store";
+import { Video } from "@/utils/YouTubeTypes";
 
 function Videos() {
+  const videos: Video[] = useAppSelector(
+    (state) => state.homeVideoSliceReducer
+  );
+
   return (
-    <div className="bg-red-500 w-full flex flex-wrap gap-8 overflow-scroll justify-center items-center">
-      {Array(9).fill(<VideoBox />)}
+    <div className="bg-black w-full flex flex-wrap gap-8 overflow-scroll justify-start items-center pl-8 py-8">
+      {videos.map(
+        ({ title, thumbnailUrl, channelTitle, duration, youtubeId }) => {
+          return (
+            <VideoBox
+              title={title}
+              thumbnailUrl={thumbnailUrl}
+              channelTitle={channelTitle}
+              duration={duration}
+              youtubeId={youtubeId}
+              key={youtubeId}
+            />
+          );
+        }
+      )}
     </div>
   );
 }

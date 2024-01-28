@@ -1,7 +1,40 @@
-import React from "react";
+"use client";
+import { useAppSelector } from "@/lib/store";
+import { Video } from "@/utils/YouTubeTypes";
+import React, { useEffect, useState } from "react";
 
-function VideoDescription() {
-  return <div className="bg-green-600 h-48">Video Description</div>;
+interface VideoDescriptionProps {
+  currentYoutubeId: string;
+}
+
+function VideoDescription({ currentYoutubeId }: VideoDescriptionProps) {
+  const videos: Video[] = useAppSelector(
+    (state) => state.homeVideoSliceReducer
+  );
+  // const [description, setDescription] = useState(
+  //   "This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description. This video has no description."
+  // );
+  const [description, setDescription] = useState(
+    "This video has no description"
+  );
+  const [channelTitle, setChannelTitle] = useState("");
+
+  useEffect(() => {
+    console.log(videos + " current Id " + currentYoutubeId);
+    videos.forEach((video) => {
+      if (video.youtubeId === currentYoutubeId) {
+        console.log(video.description);
+        setDescription(video.description ? video.description : description);
+        setChannelTitle(video.channelTitle);
+      }
+    });
+  }, []);
+  return (
+    <div className="bg-[#3F3F3F] h-48 px-4">
+      <p className="text-xl mb-4 mt-1">Created By {channelTitle}</p>
+      <p className="h-20 w-full overflow-auto">{description}</p>
+    </div>
+  );
 }
 
 export default VideoDescription;

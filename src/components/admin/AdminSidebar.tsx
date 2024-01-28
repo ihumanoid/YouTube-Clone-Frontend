@@ -7,7 +7,7 @@ function AdminSidebar() {
       <Link href="/admin" className="hover:underline">
         Dashboard
       </Link>
-      <Link href="/admin/video" className="hover:underline">
+      <Link href="/admin/videos" className="hover:underline">
         Manage Videos
       </Link>
       <Link href="/admin" className="hover:underline">
