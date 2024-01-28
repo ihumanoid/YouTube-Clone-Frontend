@@ -1,32 +1,30 @@
 import React, { useState } from "react";
 import AdminVideoBox from "./AdminVideoBox";
 import Link from "next/link";
-import { SearchResultItem, SearchResultVideo } from "@/utils/YouTubeTypes";
 import AdminVideoSearchBasket from "./AdminVideoSearchBasket";
 
 function AdminVideoAddPage() {
   const [keyword, setKeyword] = useState("");
-  const [searchResultVideos, setSearchResultVideos] =
-    useState<SearchResultVideo[]>();
+  const [searchResultVideos, setSearchResultVideos] = useState("");
 
-  const fetchVideos = async function () {
-    const response = await fetch(
-      `http://localhost:8080/admin/youtube/search?keyword=${keyword}`
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+  // const fetchVideos = async function () {
+  //   const response = await fetch(
+  //     `http://localhost:8080/admin/youtube/search?keyword=${keyword}`
+  //   );
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! Status: ${response.status}`);
+  //   }
 
-    const items = (await response.json()).data.items;
-    const newSearchResultVideos: SearchResultVideo[] = [];
-    items.forEach((item: SearchResultItem) => {
-      newSearchResultVideos.push({
-        title: item.snippet.title,
-        thumbnail: item.snippet.thumbnails.high,
-      });
-    });
-    setSearchResultVideos(newSearchResultVideos);
-  };
+  //   const items = (await response.json()).data.items;
+  //   const newSearchResultVideos: SearchResultVideo[] = [];
+  //   items.forEach((item: SearchResultItem) => {
+  //     newSearchResultVideos.push({
+  //       title: item.snippet.title,
+  //       thumbnail: item.snippet.thumbnails.high,
+  //     });
+  //   });
+  //   setSearchResultVideos(newSearchResultVideos);
+  // };
 
   return (
     <div className="bg-blue-500 w-full h-full flex flex-col p-10">
@@ -39,10 +37,7 @@ function AdminVideoAddPage() {
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="Search videos"
           ></input>
-          <button
-            onClick={fetchVideos}
-            className="bg-yellow-600 px-4 h-12 rounded-xl font-bold"
-          >
+          <button className="bg-yellow-600 px-4 h-12 rounded-xl font-bold">
             Search
           </button>
         </div>
