@@ -4,9 +4,12 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Navbar from "@/components/homepage/Navbar";
 
-const Video = dynamic(() => import("@/components/videodisplay/Video"), {
-  ssr: false,
-});
+const VideoPlayer = dynamic(
+  () => import("@/components/videodisplay/VideoPlayer"),
+  {
+    ssr: false,
+  }
+);
 
 function page({ params }: { params: { id: string } }) {
   return (
@@ -14,10 +17,10 @@ function page({ params }: { params: { id: string } }) {
       <Navbar />
       <div className="flex w-full h-[90vh] max-md:flex-col">
         <div className="flex flex-col h-full w-full">
-          <Video />
-          <VideoDescription />
+          <VideoPlayer youtubeId={params.id} />
+          <VideoDescription currentYoutubeId={params.id} />
         </div>
-        <WatchList />
+        <WatchList currentYoutubeId={params.id} />
       </div>
     </>
   );

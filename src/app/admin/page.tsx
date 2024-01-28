@@ -4,15 +4,7 @@ import AdminNavbar from "@/components/admin/AdminNavbar";
 import Dashboard from "@/components/admin/Dashboard";
 
 function page() {
-  return (
-    <div>
-      <AdminNavbar />
-      <div className="bg-slate-200 w-full h-[90vh] flex">
-        <AdminSidebar />
-        <Dashboard />
-      </div>
-    </div>
-  );
+  return <Dashboard />;
 }
 
 export default page;
