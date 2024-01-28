@@ -1,9 +1,9 @@
-import { SearchResultVideo } from "@/utils/YouTubeTypes";
+import { Video } from "@/utils/YouTubeTypes";
 import Image from "next/image";
 import React from "react";
 
 interface AdminVideoSearchBasketParams {
-  videos: SearchResultVideo[];
+  videos: Video[];
 }
 
 function AdminVideoSearchBasket({ videos }: AdminVideoSearchBasketParams) {
@@ -14,7 +14,7 @@ function AdminVideoSearchBasket({ videos }: AdminVideoSearchBasketParams) {
         <div className="w-full h-32 flex">
           <Image
             alt="thumbnail"
-            src={video.thumbnail.url}
+            src={video.thumbnailUrl}
             width={150}
             height={100}
           />
