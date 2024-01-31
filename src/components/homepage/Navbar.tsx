@@ -23,23 +23,23 @@ function Navbar() {
         ></input>
       </div>
       {login ? (
-        <div className="flex items-center justify-between w-56 mr-8">
-          <Link href="/admin" className="hover:font-bold text-xl">
+        <div className="flex items-center justify-between w-48 mx-8">
+          <Link href="/admin" className="hover:font-bold text-lg">
             Admin Panel
           </Link>
           <button
             type="button"
-            className="hover:font-bold text-xl"
+            className="hover:font-bold text-lg"
             onClick={() => setLogin(false)}
           >
             Log Out
           </button>
         </div>
       ) : (
-        <div className="flex items-center justify-end w-56  mr-8">
+        <div className="flex items-center justify-end w-48  mr-8">
           <button
             type="button"
-            className="hover:font-bold text-xl"
+            className="hover:font-bold text-lg"
             onClick={() => setLogin(true)}
           >
             Log In

@@ -20,10 +20,8 @@ function VideoDescription({ currentYoutubeId }: VideoDescriptionProps) {
   const [channelTitle, setChannelTitle] = useState("");
 
   useEffect(() => {
-    console.log(videos + " current Id " + currentYoutubeId);
     videos.forEach((video) => {
       if (video.youtubeId === currentYoutubeId) {
-        console.log(video.description);
         setDescription(video.description ? video.description : description);
         setChannelTitle(video.channelTitle);
       }
