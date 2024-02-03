@@ -1,15 +1,48 @@
+import { Video } from "@/utils/YouTubeTypes";
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Duration } from "luxon";
 
-function AdminVideoBox() {
+interface AdminVideoBoxProps {
+  toggleDeleteId: (deleteId: number) => void;
+  video: Video;
+}
+
+function AdminVideoBox({ video, toggleDeleteId }: AdminVideoBoxProps) {
+  const duration = Duration.fromISO(video.duration);
+
   return (
-    <div className="w-full bg-yellow-600 h-48 flex justify-between items-center gap-3">
-      <div className="flex h-full items-center">
-        <div className="w-64 h-5/6 bg-black flex justify-center items-center rounded-xl">
-          Image
+    <div className="w-full bg-black h-48 flex justify-between items-center gap-3 border-white border-b-2 border-soiid">
+      <div className="flex h-full items-center pl-4">
+        <div className="relative">
+          <Image
+            src={video.thumbnailUrl}
+            alt="thumbnail"
+            width={200}
+            height={150}
+          />
+          <div className="absolute bottom-5 right-1 bg-black text-white p-1 rounded">
+            {`${duration.minutes}:${duration.seconds}`}
+          </div>
         </div>
-        <div className="ml-8">Video Title: This is a very long title</div>
+        <Link
+          href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
+          className="ml-8 flex-1 line-clamp-2 hover:underline"
+          target="_blank"
+        >
+          {video.title}
+        </Link>
       </div>
-      <input type="checkbox" className="w-5 h-5 mr-4" />
+      <input
+        type="checkbox"
+        className="w-6 h-6 mr-4"
+        onClick={() => {
+          if (video.id) {
+            toggleDeleteId(video.id);
+          }
+        }}
+      />
     </div>
   );
 }

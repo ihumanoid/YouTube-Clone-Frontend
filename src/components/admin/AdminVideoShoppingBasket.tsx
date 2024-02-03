@@ -3,22 +3,21 @@ import Image from "next/image";
 import React from "react";
 import { Duration } from "luxon";
 import Link from "next/link";
-interface AdminVideoSearchBasketParams {
+interface AdminVideoShoppingBasketParams {
   videos: Video[];
-  addToBasket: (video: Video) => void;
-  loadMore: () => void;
+  removeFromBasket: (video: Video) => void;
 }
 
-function AdminVideoSearchBasket({
+function AdminVideoShoppingBasket({
   videos,
-  addToBasket,
-  loadMore,
-}: AdminVideoSearchBasketParams) {
+  removeFromBasket,
+}: AdminVideoShoppingBasketParams) {
   return (
-    <div className="bg-black h-full w-full flex flex-col overflow-auto gap-2">
+    <div className="bg-black h-full w-full flex flex-col overflow-scroll gap-2">
       {videos.map((video) => {
         const minutes = Duration.fromISO(video.duration).minutes;
         const seconds = Duration.fromISO(video.duration).seconds;
+
         return (
           <div
             key={video.youtubeId}
@@ -45,24 +44,17 @@ function AdminVideoSearchBasket({
                 {video.title}
               </Link>
               <button
-                onClick={() => addToBasket(video)}
+                onClick={() => removeFromBasket(video)}
                 className="hover:underline text-blue-500 text-sm"
               >
-                ADD TO BASKET
+                REMOVE FROM BASKET
               </button>
             </div>
           </div>
         );
       })}
-
-      <button
-        onClick={loadMore}
-        className="text-center text-xl font-bold hover:bg-slate-800 py-4 cursor-pointer"
-      >
-        Load More
-      </button>
     </div>
   );
 }
 
-export default AdminVideoSearchBasket;
+export default AdminVideoShoppingBasket;

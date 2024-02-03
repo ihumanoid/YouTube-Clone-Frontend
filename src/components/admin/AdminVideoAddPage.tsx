@@ -1,63 +1,161 @@
 import React, { useState } from "react";
 import AdminVideoBox from "./AdminVideoBox";
 import Link from "next/link";
+import { Video } from "@/utils/YouTubeTypes";
+import AdminVideoSearchBasket from "./AdminVideoSearchBasket";
+import AdminVideoShoppingBasket from "./AdminVideoShoppingBasket";
 
 function AdminVideoAddPage() {
   const [keyword, setKeyword] = useState("");
+  const [searchedVideos, setSearchedVideos] = useState<Video[]>([]);
+  const [basketVideos, setBasketVideos] = useState<Video[]>([]);
+  const [nextPageToken, setNextPageToken] = useState<string>();
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  // const fetchVideos = async function () {
-  //   const response = await fetch(
-  //     `http://localhost:8080/admin/youtube/search?keyword=${keyword}`
-  //   );
-  //   if (!response.ok) {
-  //     throw new Error(`HTTP error! Status: ${response.status}`);
-  //   }
+  const searchVideos = async function () {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/youtube/search?keyword=${keyword}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
-  //   const items = (await response.json()).data.items;
-  //   const newSearchResultVideos: SearchResultVideo[] = [];
-  //   items.forEach((item: SearchResultItem) => {
-  //     newSearchResultVideos.push({
-  //       title: item.snippet.title,
-  //       thumbnail: item.snippet.thumbnails.high,
-  //     });
-  //   });
-  //   setSearchResultVideos(newSearchResultVideos);
-  // };
+    const data = (await response.json()).data;
+    setSearchedVideos(data.videos);
+    setNextPageToken(data.nextPageToken);
+  };
+
+  const loadMore = async function () {
+    console.log(nextPageToken);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/youtube/search?pageToken=${nextPageToken}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = (await response.json()).data;
+
+    setNextPageToken(data.nextPageToken);
+    setSearchedVideos([...searchedVideos, ...data.videos]);
+    console.log(data.videos);
+  };
+
+  const addToBasket = (video: Video) => {
+    const foundVideo = basketVideos.some(
+      (basketVideo) => video.youtubeId === basketVideo.youtubeId
+    );
+    if (!foundVideo) {
+      setBasketVideos((prev) => [...prev, video]);
+    }
+  };
+
+  const removeFromBasket = (video: Video) => {
+    const newBasketVideos = basketVideos.filter(
+      (basketVideo) => video.youtubeId !== basketVideo.youtubeId
+    );
+    setBasketVideos(newBasketVideos);
+  };
+
+  const addVideos = async () => {
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/youtube/videos`;
+    const body = {
+      videos: basketVideos,
+    };
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    if (response.ok) {
+      setBasketVideos([]);
+      setShowConfirm(false);
+    }
+  };
 
   return (
     <div className="bg-blue-500 w-full h-full flex flex-col p-10">
+      {showConfirm && (
+        <div className="z-10">
+          <div className="bg-gray-800 opacity-50 fixed inset-0"></div>
+          <div className="fixed top-1/2 left-1/2 bg-[#323264] h-60 w-80 transform -translate-x-1/2 -translate-y-1/2 shadow-md">
+            <p className="text-center text-xl font-bold mt-12 mb-2">
+              Confirm Add
+            </p>
+            <div className="flex justify-center gap-8">
+              <button
+                className="text-xl bg-white text-[#323264] p-2 font-bold mt-10 rounded-2xl hover:bg-[#d5cfcf]"
+                onClick={addVideos}
+              >
+                Confirm
+              </button>
+              <button
+                className="text-xl bg-white text-[#323264] p-2 font-bold mt-10 rounded-2xl hover:bg-[#d5cfcf]"
+                onClick={() => setShowConfirm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <p className="text-3xl font-bold mb-5">Add Videos</p>
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-4">
         <div className="flex items-center gap-4">
           <input
-            className="w-96 h-12 text-black px-2"
+            className="w-72 h-12 text-black px-2"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="Search videos"
           ></input>
-          <button className="bg-yellow-600 px-4 h-12 rounded-xl font-bold">
+          <button
+            onClick={searchVideos}
+            className="bg-black px-4 h-12 rounded-xl font-bold hover:bg-[#202020]"
+          >
             Search
           </button>
         </div>
 
         <div className="flex gap-4">
-          <button className="bg-yellow-600 px-4 w-20 h-12 rounded-xl font-bold">
+          <button
+            className="bg-black px-4 w-20 h-12 rounded-xl font-bold hover:bg-[#202020]"
+            onClick={() => {
+              if (basketVideos.length > 0) setShowConfirm(true);
+            }}
+          >
             Add
           </button>
           <Link href="/admin/videos">
-            <button className="bg-yellow-600 px-4 w-20 h-12 rounded-xl font-bold">
+            <button className="bg-black px-4 w-20 h-12 rounded-xl font-bold hover:bg-[#202020]">
               Cancel
             </button>
           </Link>
         </div>
       </div>
       <div className="flex h-full gap-16 justify-between mt-5 overflow-auto">
-        <div className="bg-yellow-600 h-full w-full flex justify-center items-center font-bold text-2xl">
-          Search Result
-        </div>
-        <div className="bg-yellow-600 h-full w-full flex justify-center items-center font-bold text-2xl">
-          Selected Videos
-        </div>
+        {searchedVideos.length === 0 ? (
+          <div className="bg-black h-full w-full flex justify-center items-center font-bold text-2xl">
+            Search Result
+          </div>
+        ) : (
+          <AdminVideoSearchBasket
+            addToBasket={addToBasket}
+            loadMore={loadMore}
+            videos={searchedVideos}
+          />
+        )}
+        {basketVideos.length === 0 ? (
+          <div className="bg-black h-full w-full flex justify-center items-center font-bold text-2xl">
+            Selected Videos
+          </div>
+        ) : (
+          <AdminVideoShoppingBasket
+            removeFromBasket={removeFromBasket}
+            videos={basketVideos}
+          />
+        )}
       </div>
     </div>
   );

@@ -3,21 +3,15 @@ import React from "react";
 
 function AdminSidebar() {
   return (
-    <div className="bg-green-500 w-64 flex flex-col items-left pl-4 pt-8 gap-y-6 font-bold text-lg">
+    <div className="bg-black w-48 flex flex-col items-left px-4 pt-8 gap-y-6 font-bold text-lg">
       <Link href="/admin" className="hover:underline">
         Dashboard
       </Link>
       <Link href="/admin/videos" className="hover:underline">
-        Manage Videos
+        Videos
       </Link>
-      <Link href="/admin" className="hover:underline">
-        Manage Commercials
-      </Link>
-      <Link href="/admin" className="hover:underline">
-        Manage Watch Lists
-      </Link>
-      <Link href="/admin" className="hover:underline">
-        Manage Survey
+      <Link href="/admin/watchlists" className="hover:underline">
+        Watch Lists
       </Link>
     </div>
   );

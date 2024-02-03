@@ -10,7 +10,7 @@ function Videos() {
   );
 
   return (
-    <div className="bg-black w-full flex flex-wrap gap-8 overflow-scroll justify-start items-center pl-8 py-8">
+    <div className="bg-black w-full flex flex-wrap gap-4 overflow-scroll justify-start max-md:justify-center items-center pl-8 py-8">
       {videos.map(
         ({ title, thumbnailUrl, channelTitle, duration, youtubeId }) => {
           return (
