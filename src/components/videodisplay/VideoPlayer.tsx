@@ -3,16 +3,13 @@ import { useAppSelector } from "@/lib/store";
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Video } from "@/utils/YouTubeTypes";
+import { WatchListReducerState } from "@/lib/features/watchListSlice";
 
 interface VideoProps {
-  youtubeId: string;
+  video: Video;
 }
 
-function VideoPlayer({ youtubeId }: VideoProps) {
-  const videos: Video[] = useAppSelector(
-    (state) => state.homeVideoSliceReducer
-  );
-
+function VideoPlayer({ video }: VideoProps) {
   const [prevPlayedSeconds, setPrevPlayedSeconds] = useState(0);
 
   const handleProgress = (progress: any) => {
@@ -31,7 +28,7 @@ function VideoPlayer({ youtubeId }: VideoProps) {
         controls={true}
         width="100%"
         height="100%"
-        url={`https://www.youtube.com/shorts/${youtubeId}`}
+        url={`https://www.youtube.com/shorts/${video.youtubeId}`}
         onProgress={handleProgress}
       />
     </div>

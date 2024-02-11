@@ -2,11 +2,15 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import Videos from "./Videos";
 
-function Feed() {
+interface FeedProps {
+  watchListId: number;
+}
+
+function Feed({ watchListId }: FeedProps) {
   return (
     <div className="h-full flex">
       <Sidebar />
-      <Videos />
+      <Videos watchListId={watchListId} />
     </div>
   );
 }

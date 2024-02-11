@@ -6,7 +6,7 @@ interface DashboardItemProps {
 }
 function DashboardItem({ count, item }: DashboardItemProps) {
   return (
-    <div className="bg-yellow-500  h-[35%] w-[35%] flex justify-center items-center rounded-md">
+    <div className="bg-yellow-500  h-[35%] w-[35%] flex justify-center items-center rounded-md text-center">
       <p className="text-2xl">{`${count} ${item} Collected`} </p>
     </div>
   );

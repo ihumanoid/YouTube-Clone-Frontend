@@ -8,6 +8,7 @@ interface VideoBoxProps {
   channelTitle: string;
   youtubeId: string;
   duration: string;
+  watchListId: number;
 }
 
 function VideoBox({
@@ -16,9 +17,10 @@ function VideoBox({
   channelTitle,
   youtubeId,
   duration,
+  watchListId,
 }: VideoBoxProps) {
   return (
-    <Link href={`/video/${youtubeId}`}>
+    <Link href={`/video/${watchListId}/${youtubeId}`}>
       <div className="bg-black h-64 w-80 flex flex-wrap rounded-xl justify-center hover:bg-slate-900">
         <Image src={thumbnailUrl} alt="thumbnail" width={200} height={150} />
         <div className="bg-black w-full flex justify-start items-center gap-3">

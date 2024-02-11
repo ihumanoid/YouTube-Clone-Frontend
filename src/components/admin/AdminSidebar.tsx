@@ -3,7 +3,7 @@ import React from "react";
 
 function AdminSidebar() {
   return (
-    <div className="bg-black w-48 flex flex-col items-left px-4 pt-8 gap-y-6 font-bold text-lg">
+    <div className="bg-black w-48 min-w-48 flex flex-col items-left px-4 pt-8 gap-y-6 font-bold text-lg">
       <Link href="/admin" className="hover:underline">
         Dashboard
       </Link>

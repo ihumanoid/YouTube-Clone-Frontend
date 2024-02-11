@@ -14,7 +14,7 @@ function AdminVideoAddPage() {
 
   const searchVideos = async function () {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/youtube/search?keyword=${keyword}`
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/video/search?keyword=${keyword}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -28,7 +28,7 @@ function AdminVideoAddPage() {
   const loadMore = async function () {
     console.log(nextPageToken);
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/youtube/search?pageToken=${nextPageToken}`
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/video/search?keyword=${keyword}&pageToken=${nextPageToken}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -58,7 +58,7 @@ function AdminVideoAddPage() {
   };
 
   const addVideos = async () => {
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/youtube/videos`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/video/videos`;
     const body = {
       videos: basketVideos,
     };
@@ -76,7 +76,7 @@ function AdminVideoAddPage() {
   };
 
   return (
-    <div className="bg-blue-500 w-full h-full flex flex-col p-10">
+    <div className="bg-[#303030] w-full h-full flex flex-col p-10">
       {showConfirm && (
         <div className="z-10">
           <div className="bg-gray-800 opacity-50 fixed inset-0"></div>
@@ -122,8 +122,9 @@ function AdminVideoAddPage() {
           <button
             className="bg-black px-4 w-20 h-12 rounded-xl font-bold hover:bg-[#202020]"
             onClick={() => {
-              if (basketVideos.length > 0) setShowConfirm(true);
+              setShowConfirm(true);
             }}
+            disabled={basketVideos.length === 0}
           >
             Add
           </button>
@@ -135,27 +136,16 @@ function AdminVideoAddPage() {
         </div>
       </div>
       <div className="flex h-full gap-16 justify-between mt-5 overflow-auto">
-        {searchedVideos.length === 0 ? (
-          <div className="bg-black h-full w-full flex justify-center items-center font-bold text-2xl">
-            Search Result
-          </div>
-        ) : (
-          <AdminVideoSearchBasket
-            addToBasket={addToBasket}
-            loadMore={loadMore}
-            videos={searchedVideos}
-          />
-        )}
-        {basketVideos.length === 0 ? (
-          <div className="bg-black h-full w-full flex justify-center items-center font-bold text-2xl">
-            Selected Videos
-          </div>
-        ) : (
-          <AdminVideoShoppingBasket
-            removeFromBasket={removeFromBasket}
-            videos={basketVideos}
-          />
-        )}
+        <AdminVideoSearchBasket
+          addToBasket={addToBasket}
+          loadMore={loadMore}
+          videos={searchedVideos}
+        />
+
+        <AdminVideoShoppingBasket
+          removeFromBasket={removeFromBasket}
+          videos={basketVideos}
+        />
       </div>
     </div>
   );
