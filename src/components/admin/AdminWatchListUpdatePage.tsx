@@ -117,7 +117,7 @@ function AdminWatchListUpdatePage({
       title: watchListTitle,
       length: basketVideos.length,
       commercial: basketCommercial,
-      showAfterVideo: showAfterVideo,
+      showAfterVideoIdx: showAfterVideo - 1,
       videos: basketVideos,
     };
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/watchlist`;

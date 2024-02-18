@@ -2,6 +2,7 @@
 import { ExperimentDataVO, VideoDataDTO } from "@/utils/YouTubeTypes";
 import { current } from "@reduxjs/toolkit";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const EVideoPlayer = dynamic(
@@ -15,9 +16,10 @@ function Page({ params }: { params: { experimentId: string } }) {
   const [experimentData, setExperimentData] = useState<ExperimentDataVO | null>(
     null
   );
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchWatchLists = async () => {
+    const fetchExperimentData = async () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment?experimentId=1`
       );
@@ -28,7 +30,7 @@ function Page({ params }: { params: { experimentId: string } }) {
       const data = (await response.json()).data;
       setExperimentData(data);
     };
-    fetchWatchLists();
+    fetchExperimentData();
   }, []);
 
   const updateVideoData = async (
@@ -72,10 +74,20 @@ function Page({ params }: { params: { experimentId: string } }) {
         throw new Error(`HTTP error! Error code: ${response.status}`);
       }
 
-      setExperimentData({
-        ...experimentData,
-        currentVideoIdx: experimentData.currentVideoIdx + 1,
-      });
+      if (experimentData.currentVideoIdx == experimentData.showAfterVideoIdx) {
+        router.push(
+          `/ead/${experimentData.id}/${experimentData.skipEnabled ? "1" : "0"}`
+        );
+      } else if (experimentData.currentVideoIdx === experimentData.watchListVO.videos.length - 1) {
+        router.push(
+          `esurvey/${experimentData.id}`
+        )
+      } else {
+        setExperimentData({
+          ...experimentData,
+          currentVideoIdx: experimentData.currentVideoIdx + 1,
+        });
+      }
     }
   };
 
@@ -86,8 +98,6 @@ function Page({ params }: { params: { experimentId: string } }) {
       </div>
     );
   }
-
-  console.log(experimentData);
 
   const currentYoutubeId =
     experimentData.watchListVO.videos[experimentData.currentVideoIdx].youtubeId;

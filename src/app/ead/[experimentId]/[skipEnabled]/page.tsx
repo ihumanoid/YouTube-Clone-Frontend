@@ -1,7 +1,12 @@
 "use client";
-import { ExperimentDataVO, VideoDataDTO } from "@/utils/YouTubeTypes";
+import {
+  AdvertisementDataDTO,
+  ExperimentDataVO,
+  VideoDataDTO,
+} from "@/utils/YouTubeTypes";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const EAdPlayer = dynamic(
   () => import("@/components/evideodisplay/EAdPlayer"),
@@ -19,6 +24,7 @@ function Page({
   const [experimentData, setExperimentData] = useState<ExperimentDataVO | null>(
     null
   );
+  const router = useRouter();
 
   useEffect(() => {
     const fetchExperimentData = async () => {
@@ -45,11 +51,34 @@ function Page({
 
   const skipEnabled = params.skipEnabled === "1";
 
+  const updateAdvertisementData = async (skipped: boolean) => {
+    const advertisementData: AdvertisementDataDTO = {
+      participantId: experimentData.participantId,
+      watchListId: experimentData.watchListId,
+      skipEnabled,
+      skipped,
+    };
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/advertisementData`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(advertisementData),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Error code: ${response.status}`);
+    }
+
+    router.push(`/evideo/${experimentData.id}`);
+  };
+
   return (
     <EAdPlayer
       youtubeId="cYATyMUM0RI"
       skipEnabled={skipEnabled}
       experimentId={experimentId}
+      updateAdvertisementData={updateAdvertisementData}
     />
   );
 }

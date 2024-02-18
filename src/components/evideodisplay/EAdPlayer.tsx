@@ -2,15 +2,20 @@
 import { useAppSelector } from "@/lib/store";
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
-import { useRouter } from "next/navigation";
 
 interface EAdPlayerProps {
   youtubeId: string;
   skipEnabled: boolean;
   experimentId: string;
+  updateAdvertisementData: (skipped: boolean) => {};
 }
 
-function EAdPlayer({ youtubeId, skipEnabled, experimentId }: EAdPlayerProps) {
+function EAdPlayer({
+  youtubeId,
+  skipEnabled,
+  experimentId,
+  updateAdvertisementData,
+}: EAdPlayerProps) {
   const reactPlayerRef = useRef<ReactPlayer>(null);
   const pauseTimeoutRef = useRef(-1);
   const [hideWatchOnYouTube, setHideWatchOnYouTube] = useState(true);
@@ -18,7 +23,6 @@ function EAdPlayer({ youtubeId, skipEnabled, experimentId }: EAdPlayerProps) {
   const [uninitialized, setUninitialized] = useState(true);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(0);
-  const router = useRouter();
 
   const handleProgress = (progress: any) => {
     if (progress.playedSeconds > 0) {
@@ -40,8 +44,8 @@ function EAdPlayer({ youtubeId, skipEnabled, experimentId }: EAdPlayerProps) {
     }, 600);
   };
 
-  const handleEnd = () => {
-    router.push(`/evideo/${experimentId}`);
+  const handleEnd = (skipped: boolean) => {
+    updateAdvertisementData(skipped);
   };
 
   const formatTime = (inputSeconds: number) => {
@@ -54,12 +58,13 @@ function EAdPlayer({ youtubeId, skipEnabled, experimentId }: EAdPlayerProps) {
     return (
       <div>
         {/* Progress Bar */}
-        <div className="absolute w-full h-[88px] top-0 right-0 transparent bg-black flex justify-start items-center">
-          <div className="mx-4 text-xl text-[#C7C7C8]">
-            {formatTime(playedSeconds)} / {formatTime(totalSeconds)}
+        <div className="absolute max-w-screen w-full h-[88px] top-0 right-0 transparent bg-black flex flex-col justify-center items-start gap-2">
+          <div className="text-xl text-[#C7C7C8] ml-4">
+            Ad Duration: {formatTime(playedSeconds)} /{" "}
+            {formatTime(totalSeconds)}
           </div>
           <div
-            className="bg-red-500 h-2"
+            className="bg-red-500 h-2 ml-4"
             style={{ width: `${(playedSeconds / totalSeconds) * 100}%` }}
           ></div>
         </div>
@@ -115,7 +120,7 @@ function EAdPlayer({ youtubeId, skipEnabled, experimentId }: EAdPlayerProps) {
         {/* Skip Button */}
         {skipEnabled && playedSeconds >= 5 && (
           <button
-            onClick={handleEnd}
+            onClick={() => handleEnd(true)}
             className="group absolute w-40 h-16 right-0 bottom-4 bg-black border border-white flex items-center justify-center gap-2 text-2xl text-gray-200 hover:text-gray-400 hover:bg-[#101010] rounded-md cursor-pointer"
           >
             Skip Ad
@@ -155,7 +160,7 @@ function EAdPlayer({ youtubeId, skipEnabled, experimentId }: EAdPlayerProps) {
         onProgress={handleProgress}
         onPause={handlePause}
         onPlay={handlePlay}
-        onEnded={handleEnd}
+        onEnded={() => handleEnd(false)}
         onDuration={(duration) => setTotalSeconds(duration)}
         playing={playing}
         onKeyDown={() => console.log("detected keydown")}

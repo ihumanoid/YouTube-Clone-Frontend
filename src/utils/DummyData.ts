@@ -245,7 +245,7 @@ export const WatchLists: WatchListVO[] = [
     title: "AI",
     videos: AIVideos,
     length: AIVideos.length,
-    showAfterVideo: 2,
+    showAfterVideoIdx: 2,
     commercial: {
       youtubeId: "tn9D7O_-j7o",
       title:
@@ -262,7 +262,7 @@ export const WatchLists: WatchListVO[] = [
     title: "Sports",
     videos: SportsVideos,
     length: SportsVideos.length,
-    showAfterVideo: 3,
+    showAfterVideoIdx: 3,
     commercial: {
       youtubeId: "tn9D7O_-j7o",
       title:
@@ -279,7 +279,7 @@ export const WatchLists: WatchListVO[] = [
     title: "Fashion",
     videos: FashionVideos,
     length: FashionVideos.length,
-    showAfterVideo: 4,
+    showAfterVideoIdx: 4,
     commercial: {
       youtubeId: "tn9D7O_-j7o",
       title:
@@ -296,7 +296,7 @@ export const WatchLists: WatchListVO[] = [
     title: "Gaming",
     videos: GamingVideos,
     length: GamingVideos.length,
-    showAfterVideo: 1,
+    showAfterVideoIdx: 1,
     commercial: {
       youtubeId: "tn9D7O_-j7o",
       title:
@@ -313,7 +313,7 @@ export const WatchLists: WatchListVO[] = [
     title: "Food",
     videos: FoodVideos,
     length: FoodVideos.length,
-    showAfterVideo: 2,
+    showAfterVideoIdx: 2,
     commercial: {
       youtubeId: "tn9D7O_-j7o",
       title:

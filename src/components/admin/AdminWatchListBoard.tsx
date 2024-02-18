@@ -68,7 +68,7 @@ function AdminWatchListBoard() {
             onChange={(e) => {
               setKeyword(e.target.value);
             }}
-            placeholder="Search videos"
+            placeholder="Search watch lists"
           ></input>
           <button
             className="bg-black px-4 w-22 h-12 rounded-xl font-bold hover:bg-[#202020]"

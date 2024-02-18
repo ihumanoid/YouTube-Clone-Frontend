@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { Video } from "@/utils/YouTubeTypes";
 import { WatchListReducerState } from "@/lib/features/watchListSlice";
-import { useRouter } from "next/navigation";
 
 interface EVideoPlayerProps {
   youtubeId: string;
@@ -24,7 +23,6 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
   const [hideWatchOnYouTube, setHideWatchOnYouTube] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [uninitialized, setUninitialized] = useState(true);
-  const router = useRouter();
 
   // Video Data
   const [liked, setLiked] = useState(false);
@@ -146,18 +144,29 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
         </div>
         {/* Block Watch On Youtube */}
         {hideWatchOnYouTube && (
-          <div className="absolute w-48 h-20 bottom-0 left-0 transparent"></div>
+          <div className="absolute w-48 h-20 bottom-0 left-0 transparent group flex justify-center items-end pb-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              width={40}
+              height={40}
+              fill="gray"
+              className="opacity-0 group-hover:opacity-100"
+            >
+              <path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+            </svg>
+          </div>
         )}
         {/* Block More Shorts */}
         {!playing && !uninitialized && (
           <div
-            className={`absolute top-3/4 max-md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[26rem] flex flex-col items-center justify-center bg-black gap-4 transition duration-1000
+            className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-screen flex flex-col items-center justify-center bg-black gap-4 transition duration-1000
           
         `}
           ></div>
         )}
         <div
-          className={`absolute top-3/4 max-md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[26rem] flex flex-col items-center justify-center bg-black gap-4 transition duration-1000 ${
+          className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-screen flex flex-col items-center justify-center bg-black gap-4 transition duration-1000 ${
             (playing || uninitialized) && "-translate-x-[2500px] "
           }`}
         >
@@ -169,8 +178,8 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
-                width={100}
-                height={100}
+                width={120}
+                height={120}
                 className="text-[#F9F9F9] fill-current hover:text-[#B9B9B9]"
                 onClick={handleLike}
               >
@@ -186,8 +195,8 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
-                width={100}
-                height={100}
+                width={120}
+                height={120}
                 className="text-[#F9F9F9] fill-current hover:text-[#B9B9B9]"
                 onClick={handleDislike}
               >
@@ -206,8 +215,8 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
-                width={100}
-                height={100}
+                width={120}
+                height={120}
                 className="text-[#F9F9F9] fill-current hover:text-[#B9B9B9]"
               >
                 <path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c7.6-4.2 16.8-4.1 24.3 .5l144 88c7.1 4.4 11.5 12.1 11.5 20.5s-4.4 16.1-11.5 20.5l-144 88c-7.4 4.5-16.7 4.7-24.3 .5s-12.3-12.2-12.3-20.9V168c0-8.7 4.7-16.7 12.3-20.9z" />
@@ -239,14 +248,14 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
       {getHideElements()}
       <ReactPlayer
         ref={reactPlayerRef}
-        // config={{
-        //   youtube: {
-        //     playerVars: {
-        //       disablekb: 1, // Disable keyboard controls
-        //       fs: 0, // Disable full screen
-        //     },
-        //   },
-        // }}
+        config={{
+          youtube: {
+            playerVars: {
+              // disablekb: 1, // Disable keyboard controls
+              // fs: 0, // Disable full screen
+            },
+          },
+        }}
         controls={true}
         width="100%"
         height="100%"

@@ -6,10 +6,12 @@ import { Video, WatchListDTO } from "@/utils/YouTubeTypes";
 import AdminWatchListShoppingBasket from "./AdminWatchListShoppingBasket";
 import AdminWatchListSearchBasket from "./AdminWatchListSearchBasket";
 import { useRouter } from "next/navigation";
+import { VideoTopics } from "@/utils/RealData";
+import { VideoTopic } from "@/utils/YouTubeTypes";
 
-enum DropdownValues {
-  YouTube,
-  Database,
+enum SourceValues {
+  YouTube = "YouTube",
+  Database = "DataBase",
 }
 
 function AdminWatchListAddPage() {
@@ -19,18 +21,47 @@ function AdminWatchListAddPage() {
   const [basketVideos, setBasketVideos] = useState<Video[]>([]);
   const [basketCommercial, setBasketCommercial] = useState<Video | null>(null);
   const [nextPageToken, setNextPageToken] = useState<string>("");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [dropdownValue, setDropdownValue] = useState(DropdownValues.YouTube);
   const [showAfterVideo, setShowAfterVideo] = useState(1);
   const [watchListTitle, setWatchListTitle] = useState("");
   const router = useRouter();
 
+  // search params
+  const [selectedSource, setSelectedSource] = useState("YouTube");
+  const [topicFilter, setTopicFilter] = useState<string>();
+  const [topicSuggestions, setTopicSuggestions] = useState<VideoTopic[]>([]);
+
+  const handleSelectSource = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSource(e.target.value);
+  };
+
+  const handleTopicFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTopic = e.target.value;
+    setTopicFilter(newTopic);
+    if (newTopic) {
+      const newTopicSuggestions = VideoTopics.filter((videoTopic) =>
+        videoTopic.topic.toLowerCase().includes(newTopic.toLowerCase())
+      );
+      setTopicSuggestions(newTopicSuggestions);
+    } else {
+      setTopicSuggestions([]);
+    }
+  };
+
+  const handleSelectTopicSuggestion = (newTopicFilter: string) => {
+    setTopicFilter(newTopicFilter);
+    setTopicSuggestions([]);
+  };
+
   const searchVideos = async function () {
+    const videoTopic = VideoTopics.filter(
+      (videoTopic) => videoTopic.topic === topicFilter
+    );
+    const topicId = videoTopic.length > 0 && videoTopic[0].id;
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin${
-      dropdownValue === DropdownValues.YouTube
+      selectedSource === SourceValues.YouTube
         ? "/video/search"
         : "/video/searchDatabase"
-    }?keyword=${keyword}`;
+    }?keyword=${keyword}&topicId=${topicId}`;
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -44,8 +75,12 @@ function AdminWatchListAddPage() {
   };
 
   const loadMore = async function () {
+    const videoTopic = VideoTopics.filter(
+      (videoTopic) => videoTopic.topic === topicFilter
+    );
+    const topicId = videoTopic.length > 0 && videoTopic[0].id;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/video/search?keyword=${keyword}&pageToken=${nextPageToken}`
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/video/search?keyword=${keyword}&pageToken=${nextPageToken}&topicId=${topicId}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -81,7 +116,7 @@ function AdminWatchListAddPage() {
       title: watchListTitle,
       length: basketVideos.length,
       commercial: basketCommercial,
-      showAfterVideo: showAfterVideo,
+      showAfterVideoIdx: showAfterVideo - 1,
       videos: basketVideos,
     };
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/watchlist`;
@@ -105,7 +140,7 @@ function AdminWatchListAddPage() {
   useEffect(() => {
     setNextPageToken("");
     setSearchedVideos([]);
-  }, [dropdownValue]);
+  }, [selectedSource]);
 
   const selectCommercial = (video: Video) => {
     setBasketCommercial(video);
@@ -161,49 +196,39 @@ function AdminWatchListAddPage() {
           >
             Search
           </button>
-          <div className="relative inline-block text-left">
-            <button
-              type="button"
-              className="bg-black  flex justify-center items-center gap-2 h-8 px-2 rounded-xl hover:bg-[#202020]"
-              onClick={() => setDropdownOpen((prev) => !prev)}
-            >
-              {dropdownValue === DropdownValues.YouTube
-                ? "YouTube"
-                : "Database"}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                width={15}
-                height={15}
-                fill="white"
-              >
-                <path d="M384 480c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0zM224 352c-6.7 0-13-2.8-17.6-7.7l-104-112c-6.5-7-8.2-17.2-4.4-25.9s12.5-14.4 22-14.4l208 0c9.5 0 18.2 5.7 22 14.4s2.1 18.9-4.4 25.9l-104 112c-4.5 4.9-10.9 7.7-17.6 7.7z" />
-              </svg>
-            </button>
-
-            {dropdownOpen && (
-              <div className="origin-top-right absolute right-0 mt-2 w-24 rounded-md shadow-lg bg-black text-white ring-opacity-5 z-10">
-                <div className="py-1">
-                  <button
-                    className="block px-4 py-2 w-full text-sm hover:bg-[#202020]"
-                    onClick={() => {
-                      setDropdownValue(DropdownValues.YouTube);
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    Youtube
-                  </button>
-                  <button
-                    className="block px-4 py-2 w-full text-sm hover:bg-[#202020]"
-                    onClick={() => {
-                      setDropdownValue(DropdownValues.Database);
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    Database
-                  </button>
-                </div>
-              </div>
+          <select
+            value={selectedSource}
+            onChange={handleSelectSource}
+            className="bg-black px-2 text-sm w-22 h-12 rounded-xl font-bold cursor-pointer"
+          >
+            <option value="YouTube">YouTube</option>
+            <option value="Database">Database</option>
+          </select>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Filter by topic"
+              className="bg-black px-2 text-sm h-12"
+              value={topicFilter}
+              onChange={handleTopicFilter}
+            />
+            {topicSuggestions.length > 0 && (
+              <ul className="absolute h-32 w-full flex flex-col overflow-auto bg-[#101010]">
+                {topicSuggestions.map((suggestion, idx) => {
+                  return (
+                    <li key={idx}>
+                      <button
+                        className="font-bold text-lg text-start p-2 w-full h-full hover:bg-[#202020] cursor-pointer"
+                        onClick={() =>
+                          handleSelectTopicSuggestion(suggestion.topic)
+                        }
+                      >
+                        {suggestion.topic}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
             )}
           </div>
         </div>
@@ -234,7 +259,7 @@ function AdminWatchListAddPage() {
           videos={searchedVideos}
           addToBasket={addToBasket}
           loadMore={loadMore}
-          showLoadMore={dropdownValue === DropdownValues.YouTube}
+          showLoadMore={selectedSource === SourceValues.YouTube}
           selectCommercial={selectCommercial}
         />
 

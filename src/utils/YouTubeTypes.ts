@@ -13,7 +13,7 @@ export interface WatchListVO {
   title: string;
   length: number;
   commercial: Video;
-  showAfterVideo: number;
+  showAfterVideoIdx: number;
   videos: Video[];
 }
 
@@ -21,7 +21,7 @@ export interface WatchListDTO {
   title: string;
   length: number;
   commercial: Video;
-  showAfterVideo: number;
+  showAfterVideoIdx: number;
   videos: Video[];
 }
 
@@ -43,6 +43,8 @@ export interface ExperimentDataVO {
   id: string;
   participantId: string;
   watchListId: number;
+  skipEnabled: boolean;
+  showAfterVideoIdx: number;
   currentVideoIdx: number;
   watchListVO: WatchListVO;
 }
@@ -57,4 +59,23 @@ export interface VideoDataDTO {
   numSkipsBehind: number;
   liked: boolean;
   disliked: boolean;
+}
+
+export interface AdvertisementDataDTO {
+  participantId: string;
+  watchListId: number;
+  skipEnabled: boolean;
+  skipped: boolean;
+}
+
+export interface SurveyDataDTO {
+  experimentId: string;
+  advertisementRating: number;
+  advertisementBrand: string;
+  advertisementProduct: string;
+}
+
+export interface VideoTopic {
+  id: string;
+  topic: string;
 }

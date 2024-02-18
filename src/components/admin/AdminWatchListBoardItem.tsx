@@ -57,7 +57,7 @@ function AdminWatchListBoardItem({
                 className="text-lg w-36 bg-white text-[#323264] p-2 font-bold mt-10 rounded-2xl hover:bg-[#d5cfcf]"
                 onClick={() => deleteWatchList(watchList.id, true)}
               >
-                Delete with Videos
+                Delete with Unused Videos
               </button>
             </div>
           </div>
