@@ -1,5 +1,5 @@
 import React from "react";
-import AdminWatchListAddPage from "@/components/admin/AdminWatchListAddPage";
+import AdminWatchListAddPage from "@/components/admin/watchlist/AdminWatchListAddPage";
 
 function page() {
   return <AdminWatchListAddPage />;

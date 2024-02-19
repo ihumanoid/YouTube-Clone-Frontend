@@ -42,11 +42,22 @@ export interface SystemSummaryVO {
 export interface ExperimentDataVO {
   id: string;
   participantId: string;
+  watchListTitle: string;
   watchListId: number;
   skipEnabled: boolean;
   showAfterVideoIdx: number;
   currentVideoIdx: number;
   watchListVO: WatchListVO;
+}
+
+export interface ExperimentData {
+  id: string;
+  participantId: string;
+  watchListId: number;
+  watchListTitle: string;
+  currentVideoIdx: number;
+  skipEnabled: boolean;
+  showAfterVideoIdx: number;
 }
 
 export interface VideoDataDTO {

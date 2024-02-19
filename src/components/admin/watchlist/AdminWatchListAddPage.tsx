@@ -1,70 +1,67 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import AdminVideoBox from "./AdminVideoBox";
+import AdminVideoBox from "../video/AdminVideoBox";
 import Link from "next/link";
-import { Video, WatchListDTO, WatchListVO } from "@/utils/YouTubeTypes";
-import AdminVideoSearchBasket from "./AdminVideoSearchBasket";
-import AdminVideoShoppingBasket from "./AdminWatchListShoppingBasket";
+import { Video, WatchListDTO } from "@/utils/YouTubeTypes";
 import AdminWatchListShoppingBasket from "./AdminWatchListShoppingBasket";
 import AdminWatchListSearchBasket from "./AdminWatchListSearchBasket";
-import { useSelectedLayoutSegment } from "next/navigation";
-import WatchList from "../videodisplay/ExperimentWatchList";
-import { useAppSelector } from "@/lib/store";
-import { WatchListReducerState } from "@/lib/features/watchListSlice";
 import { useRouter } from "next/navigation";
+import { VideoTopics } from "@/utils/RealData";
+import { VideoTopic } from "@/utils/YouTubeTypes";
 
-enum DropdownValues {
-  YouTube,
-  Database,
+enum SourceValues {
+  YouTube = "YouTube",
+  Database = "DataBase",
 }
 
-interface AdminWatchListUpdatePageProps {
-  watchListId: number;
-}
-
-function AdminWatchListUpdatePage({
-  watchListId,
-}: AdminWatchListUpdatePageProps) {
-  // initial states
-  const watchListState: WatchListReducerState = useAppSelector(
-    (state) => state.watchListSliceReducer
-  );
-  let initialBasketVideos: Video[] = [];
-  let initialBasketCommercial = null;
-  let initialWatchListTitle = "";
-  if (watchListId !== -1) {
-    const watchListIdx = watchListState.watchLists.findIndex(
-      (watchList) => watchList.id === watchListId
-    );
-    const watchList = watchListState.watchLists[watchListIdx];
-    initialBasketVideos = watchList.videos;
-    initialBasketCommercial = watchList.commercial;
-    initialWatchListTitle = watchList.title;
-  }
-
-  // define variables
+function AdminWatchListAddPage() {
   const [keyword, setKeyword] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [searchedVideos, setSearchedVideos] = useState<Video[]>([]);
-  const [basketVideos, setBasketVideos] =
-    useState<Video[]>(initialBasketVideos);
-  const [basketCommercial, setBasketCommercial] = useState<Video | null>(
-    initialBasketCommercial
-  );
+  const [basketVideos, setBasketVideos] = useState<Video[]>([]);
+  const [basketCommercial, setBasketCommercial] = useState<Video | null>(null);
   const [nextPageToken, setNextPageToken] = useState<string>("");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [dropdownValue, setDropdownValue] = useState(DropdownValues.YouTube);
   const [showAfterVideo, setShowAfterVideo] = useState(1);
-  const [watchListTitle, setWatchListTitle] = useState(initialWatchListTitle);
+  const [watchListTitle, setWatchListTitle] = useState("");
   const router = useRouter();
 
-  // helper functions
+  // search params
+  const [selectedSource, setSelectedSource] = useState("YouTube");
+  const [topicFilter, setTopicFilter] = useState<string>();
+  const [topicSuggestions, setTopicSuggestions] = useState<VideoTopic[]>([]);
+
+  const handleSelectSource = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSource(e.target.value);
+  };
+
+  const handleTopicFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTopic = e.target.value;
+    setTopicFilter(newTopic);
+    if (newTopic) {
+      const newTopicSuggestions = VideoTopics.filter((videoTopic) =>
+        videoTopic.topic.toLowerCase().includes(newTopic.toLowerCase())
+      );
+      setTopicSuggestions(newTopicSuggestions);
+    } else {
+      setTopicSuggestions([]);
+    }
+  };
+
+  const handleSelectTopicSuggestion = (newTopicFilter: string) => {
+    setTopicFilter(newTopicFilter);
+    setTopicSuggestions([]);
+  };
+
   const searchVideos = async function () {
+    const videoTopic = VideoTopics.filter(
+      (videoTopic) => videoTopic.topic === topicFilter
+    );
+    const topicId = videoTopic.length > 0 && videoTopic[0].id;
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin${
-      dropdownValue === DropdownValues.YouTube
+      selectedSource === SourceValues.YouTube
         ? "/video/search"
         : "/video/searchDatabase"
-    }?keyword=${keyword}`;
+    }?keyword=${keyword}&topicId=${topicId}`;
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -78,15 +75,18 @@ function AdminWatchListUpdatePage({
   };
 
   const loadMore = async function () {
+    const videoTopic = VideoTopics.filter(
+      (videoTopic) => videoTopic.topic === topicFilter
+    );
+    const topicId = videoTopic.length > 0 && videoTopic[0].id;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/video/search?keyword=${keyword}&pageToken=${nextPageToken}`
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/video/search?keyword=${keyword}&pageToken=${nextPageToken}&topicId=${topicId}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const data = (await response.json()).data;
-    console.log(data);
     setNextPageToken(data.nextPageToken);
     setSearchedVideos([...searchedVideos, ...data.videos]);
   };
@@ -107,13 +107,12 @@ function AdminWatchListUpdatePage({
     setBasketVideos(newBasketVideos);
   };
 
-  const updateWatchList = async () => {
+  const addWatchList = async () => {
     if (!basketCommercial) {
       return;
     }
 
-    const watchList: WatchListVO = {
-      id: watchListId,
+    const watchList: WatchListDTO = {
       title: watchListTitle,
       length: basketVideos.length,
       commercial: basketCommercial,
@@ -122,17 +121,26 @@ function AdminWatchListUpdatePage({
     };
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/watchlist`;
     const response = await fetch(url, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(watchList),
     });
 
-    if (response.ok) {
-      router.push("/admin/watchlists");
+    if (!response.ok) {
+      throw new Error(`HTTP error! error code: ${response.status}`);
     }
+    setBasketVideos([]);
+    setBasketCommercial(null);
+    setShowConfirm(false);
+    router.push("/admin/watchlists");
   };
+
+  useEffect(() => {
+    setNextPageToken("");
+    setSearchedVideos([]);
+  }, [selectedSource]);
 
   const selectCommercial = (video: Video) => {
     setBasketCommercial(video);
@@ -142,12 +150,6 @@ function AdminWatchListUpdatePage({
     setBasketCommercial(null);
   };
 
-  // use effect
-  useEffect(() => {
-    setNextPageToken("");
-    setSearchedVideos([]);
-  }, [dropdownValue]);
-
   return (
     <div className="bg-[#303030]  w-full h-full flex flex-col p-10">
       {showConfirm && (
@@ -155,18 +157,17 @@ function AdminWatchListUpdatePage({
           <div className="bg-gray-800 opacity-50 fixed inset-0"></div>
           <div className="fixed top-1/2 left-1/2 bg-[#323264] h-60 w-80 transform -translate-x-1/2 -translate-y-1/2 shadow-md">
             <div className="text-center text-xl font-bold mt-12 mb-2">
-              <p>Rename and Confirm</p>
+              <p>Name the Watch List</p>
               <input
                 type="text"
                 className="w-40 h-10 mt-2 p-2 rounded-md text-[#323264]"
-                value={watchListTitle}
                 onChange={(e) => setWatchListTitle(e.target.value)}
               />
             </div>
             <div className="flex justify-center gap-8">
               <button
                 className="text-xl bg-white text-[#323264] p-2 font-bold mt-10 rounded-2xl hover:bg-[#d5cfcf]"
-                onClick={updateWatchList}
+                onClick={addWatchList}
               >
                 Confirm
               </button>
@@ -180,7 +181,7 @@ function AdminWatchListUpdatePage({
           </div>
         </div>
       )}
-      <p className="text-3xl font-bold mb-5">Update Watch List</p>
+      <p className="text-3xl font-bold mb-5">Create Watch List</p>
       <div className="flex justify-between gap-4">
         <div className="flex items-center gap-4">
           <input
@@ -195,49 +196,39 @@ function AdminWatchListUpdatePage({
           >
             Search
           </button>
-          <div className="relative inline-block text-left">
-            <button
-              type="button"
-              className="bg-black  flex justify-center items-center gap-2 h-8 px-2 rounded-xl hover:bg-[#202020]"
-              onClick={() => setDropdownOpen((prev) => !prev)}
-            >
-              {dropdownValue === DropdownValues.YouTube
-                ? "YouTube"
-                : "Database"}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                width={15}
-                height={15}
-                fill="white"
-              >
-                <path d="M384 480c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0zM224 352c-6.7 0-13-2.8-17.6-7.7l-104-112c-6.5-7-8.2-17.2-4.4-25.9s12.5-14.4 22-14.4l208 0c9.5 0 18.2 5.7 22 14.4s2.1 18.9-4.4 25.9l-104 112c-4.5 4.9-10.9 7.7-17.6 7.7z" />
-              </svg>
-            </button>
-
-            {dropdownOpen && (
-              <div className="origin-top-right absolute right-0 mt-2 w-24 rounded-md shadow-lg bg-black text-white ring-opacity-5 z-10">
-                <div className="py-1">
-                  <button
-                    className="block px-4 py-2 w-full text-sm hover:bg-[#202020]"
-                    onClick={() => {
-                      setDropdownValue(DropdownValues.YouTube);
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    Youtube
-                  </button>
-                  <button
-                    className="block px-4 py-2 w-full text-sm hover:bg-[#202020]"
-                    onClick={() => {
-                      setDropdownValue(DropdownValues.Database);
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    Database
-                  </button>
-                </div>
-              </div>
+          <select
+            value={selectedSource}
+            onChange={handleSelectSource}
+            className="bg-black px-2 text-sm w-22 h-12 rounded-xl font-bold cursor-pointer"
+          >
+            <option value="YouTube">YouTube</option>
+            <option value="Database">Database</option>
+          </select>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Filter by topic"
+              className="bg-black px-2 text-sm h-12"
+              value={topicFilter}
+              onChange={handleTopicFilter}
+            />
+            {topicSuggestions.length > 0 && (
+              <ul className="absolute h-32 w-full flex flex-col overflow-auto bg-[#101010]">
+                {topicSuggestions.map((suggestion, idx) => {
+                  return (
+                    <li key={idx}>
+                      <button
+                        className="font-bold text-lg text-start p-2 w-full h-full hover:bg-[#202020] cursor-pointer"
+                        onClick={() =>
+                          handleSelectTopicSuggestion(suggestion.topic)
+                        }
+                      >
+                        {suggestion.topic}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
             )}
           </div>
         </div>
@@ -250,11 +241,11 @@ function AdminWatchListUpdatePage({
             }}
             disabled={
               basketVideos.length === 0 ||
-              !selectCommercial ||
+              !basketCommercial ||
               showAfterVideo === -1
             }
           >
-            Update
+            Create
           </button>
           <Link href="/admin/watchlists">
             <button className="bg-black px-4 w-22 h-12 rounded-xl font-bold hover:bg-[#202020]">
@@ -268,7 +259,7 @@ function AdminWatchListUpdatePage({
           videos={searchedVideos}
           addToBasket={addToBasket}
           loadMore={loadMore}
-          showLoadMore={dropdownValue === DropdownValues.YouTube}
+          showLoadMore={selectedSource === SourceValues.YouTube}
           selectCommercial={selectCommercial}
         />
 
@@ -286,4 +277,4 @@ function AdminWatchListUpdatePage({
   );
 }
 
-export default AdminWatchListUpdatePage;
+export default AdminWatchListAddPage;

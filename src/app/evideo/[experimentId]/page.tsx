@@ -21,7 +21,7 @@ function Page({ params }: { params: { experimentId: string } }) {
   useEffect(() => {
     const fetchExperimentData = async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment?experimentId=1`
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment?experimentId=${params.experimentId}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -30,6 +30,7 @@ function Page({ params }: { params: { experimentId: string } }) {
       const data = (await response.json()).data;
       setExperimentData(data);
     };
+
     fetchExperimentData();
   }, []);
 
@@ -78,10 +79,11 @@ function Page({ params }: { params: { experimentId: string } }) {
         router.push(
           `/ead/${experimentData.id}/${experimentData.skipEnabled ? "1" : "0"}`
         );
-      } else if (experimentData.currentVideoIdx === experimentData.watchListVO.videos.length - 1) {
-        router.push(
-          `esurvey/${experimentData.id}`
-        )
+      } else if (
+        experimentData.currentVideoIdx ===
+        experimentData.watchListVO.videos.length - 1
+      ) {
+        router.push(`esurvey/${experimentData.id}`);
       } else {
         setExperimentData({
           ...experimentData,

@@ -13,6 +13,9 @@ function AdminSidebar() {
       <Link href="/admin/watchlists" className="hover:underline">
         Watch Lists
       </Link>
+      <Link href="/admin/experiments" className="hover:underline">
+        Experiments
+      </Link>
     </div>
   );
 }
