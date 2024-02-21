@@ -1,5 +1,5 @@
 "use client";
-import AdminVideoAddPage from "@/components/admin/AdminVideoAddPage";
+import AdminVideoAddPage from "@/components/admin/video/AdminVideoAddPage";
 import React from "react";
 
 function page() {

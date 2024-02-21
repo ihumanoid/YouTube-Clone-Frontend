@@ -1,11 +1,36 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAppSelector } from "@/lib/store";
+import { changeAllWatchLists } from "@/lib/features/watchListSlice";
+import { useDispatch } from "react-redux";
 
 function Navbar() {
   const [keyword, setKeyword] = useState("");
   const [login, setLogin] = useState(false);
+  const watchListState = useAppSelector((state) => state.watchListSliceReducer);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchWatchLists = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/watchlist/watchlists`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const watchLists = (await response.json()).data;
+      console.log("fetch via navbar" + watchLists);
+      dispatch(changeAllWatchLists(watchLists));
+    };
+    if (watchListState.watchLists.length === 0) {
+      fetchWatchLists();
+    } else {
+      console.log(watchListState.watchLists);
+    }
+  }, []);
 
   return (
     <div className="bg-black h-[10vh] flex">

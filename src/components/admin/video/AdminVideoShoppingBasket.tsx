@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { Duration } from "luxon";
 import Link from "next/link";
+
 interface AdminVideoShoppingBasketParams {
   videos: Video[];
   removeFromBasket: (video: Video) => void;
@@ -12,15 +13,22 @@ function AdminVideoShoppingBasket({
   videos,
   removeFromBasket,
 }: AdminVideoShoppingBasketParams) {
+  if (videos.length === 0) {
+    return (
+      <div className="bg-black h-full w-full flex justify-center items-center font-bold text-2xl">
+        Selected Videos
+      </div>
+    );
+  }
   return (
     <div className="bg-black h-full w-full flex flex-col overflow-scroll gap-2">
-      {videos.map((video) => {
+      {videos.map((video, idx) => {
         const minutes = Duration.fromISO(video.duration).minutes;
         const seconds = Duration.fromISO(video.duration).seconds;
 
         return (
           <div
-            key={video.youtubeId}
+            key={idx}
             className="w-full h-20 max-h-20 flex border-b-white border-b-solid border-b-2"
           >
             <div className="relative flex w-30 justify-center bg">

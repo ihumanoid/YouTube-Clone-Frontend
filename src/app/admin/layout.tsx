@@ -11,7 +11,7 @@ export default function AdminLayout({
     <section>
       {/* Include shared UI here e.g. a header or sidebar */}
       <AdminNavbar />
-      <div className="bg-slate-200 w-full h-[90vh] flex">
+      <div className="bg-slate-200 w-screen h-[90vh] flex max-w-screen">
         <AdminSidebar />
         {children}
       </div>

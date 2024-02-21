@@ -3,25 +3,37 @@ import Image from "next/image";
 import React from "react";
 import { Duration } from "luxon";
 import Link from "next/link";
-interface AdminVideoSearchBasketParams {
+interface AdminWatchListSearchBasketParams {
   videos: Video[];
   addToBasket: (video: Video) => void;
   loadMore: () => void;
+  showLoadMore: boolean;
+  selectCommercial: (video: Video) => void;
 }
 
-function AdminVideoSearchBasket({
+function AdminWatchListSearchBasket({
   videos,
   addToBasket,
+  selectCommercial,
   loadMore,
-}: AdminVideoSearchBasketParams) {
+  showLoadMore,
+}: AdminWatchListSearchBasketParams) {
+  if (videos.length === 0) {
+    return (
+      <div className="bg-black h-full w-full flex justify-center items-center font-bold text-2xl">
+        Search Result
+      </div>
+    );
+  }
+
   return (
     <div className="bg-black h-full w-full flex flex-col overflow-auto gap-2">
-      {videos.map((video) => {
+      {videos.map((video, idx) => {
         const minutes = Duration.fromISO(video.duration).minutes;
         const seconds = Duration.fromISO(video.duration).seconds;
         return (
           <div
-            key={video.youtubeId}
+            key={(video.youtubeId, idx)}
             className="w-full h-20 max-h-20 flex border-b-white border-b-solid border-b-2"
           >
             <div className="relative flex w-30 justify-center bg">
@@ -44,25 +56,34 @@ function AdminVideoSearchBasket({
               >
                 {video.title}
               </Link>
-              <button
-                onClick={() => addToBasket(video)}
-                className="hover:underline text-blue-500 text-sm"
-              >
-                ADD TO BASKET
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => addToBasket(video)}
+                  className="hover:underline text-blue-500 text-xs"
+                >
+                  ADD TO VIDEOS
+                </button>
+                <button
+                  onClick={() => selectCommercial(video)}
+                  className="hover:underline text-blue-500 text-xs"
+                >
+                  SELECT AS COMMERCIAL
+                </button>
+              </div>
             </div>
           </div>
         );
       })}
-
-      <button
-        onClick={loadMore}
-        className="text-center text-xl font-bold hover:bg-slate-800 py-4 cursor-pointer"
-      >
-        Load More
-      </button>
+      {showLoadMore && (
+        <button
+          onClick={loadMore}
+          className="text-center text-xl font-bold hover:bg-slate-800 py-4 cursor-pointer"
+        >
+          Load More
+        </button>
+      )}
     </div>
   );
 }
 
-export default AdminVideoSearchBasket;
+export default AdminWatchListSearchBasket;

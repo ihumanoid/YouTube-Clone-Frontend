@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { homeVideoSliceReducer } from "./features/homeVideoSlice";
+import { watchListSliceReducer } from "./features/watchListSlice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 export const store = configureStore({
-  reducer: { homeVideoSliceReducer },
+  reducer: { watchListSliceReducer },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

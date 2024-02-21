@@ -26,13 +26,16 @@ function AdminVideoBox({ video, toggleDeleteId }: AdminVideoBoxProps) {
             {`${duration.minutes}:${duration.seconds}`}
           </div>
         </div>
-        <Link
-          href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
-          className="ml-8 flex-1 line-clamp-2 hover:underline"
-          target="_blank"
-        >
-          {video.title}
-        </Link>
+        <div className="flex flex-col flex-1 ml-8">
+          <Link
+            href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
+            className="line-clamp-2 hover:underline mb-4"
+            target="_blank"
+          >
+            {video.title}
+          </Link>
+          <p className="text-[#AAAAAA] text-sm">{video.channelTitle}</p>
+        </div>
       </div>
       <input
         type="checkbox"
