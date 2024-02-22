@@ -53,7 +53,7 @@ const ESurvey = ({ experimentId }: ESurveyProps) => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-semibold mb-4">Advertisement Survey</h1>
+      <h1 className="text-3xl font-semibold mb-4">Post Survey</h1>
       <form onSubmit={handleSubmit}>
         {/* Question 1: Rating */}
         <div className="mb-6">

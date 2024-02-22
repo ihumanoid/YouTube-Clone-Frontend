@@ -4,6 +4,7 @@ import { ExperimentData } from "@/utils/YouTubeTypes";
 import AdminExperimentAddWindow from "./AdminExperimentAddWindow";
 import AdminExperimentEditWindow from "./AdminExperimentEditWindow";
 import AdminExperimentDeleteConfirm from "./AdminExperimentConfirmDelete";
+import Link from "next/link";
 
 const FilterTypes = [
   "ID",
@@ -55,14 +56,6 @@ function AdminExperimentBoard() {
   useEffect(() => {
     fetchExperimentData();
   }, []);
-
-  if (experimentDataTable.length === 0) {
-    return (
-      <div className="h-full w-full bg-[#303030] text-2xl flex justify-center items-center">
-        Loading...
-      </div>
-    );
-  }
 
   return (
     <div className="h-full w-full bg-[#303030] flex flex-col p-10">
@@ -181,6 +174,13 @@ function AdminExperimentBoard() {
                   >
                     Delete
                   </button>
+                  <Link
+                    className="bg-green-500 text-white py-1 px-2 w-28"
+                    href={`/evideo/${item.id}`}
+                    target="_blank"
+                  >
+                    Go to Videos
+                  </Link>
                 </td>
               </tr>
             ))}
