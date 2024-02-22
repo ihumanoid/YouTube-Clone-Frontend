@@ -75,7 +75,7 @@ function Page({ params }: { params: { experimentId: string } }) {
         throw new Error(`HTTP error! Error code: ${response.status}`);
       }
 
-      if (experimentData.currentVideoIdx == experimentData.showAfterVideoIdx) {
+      if (experimentData.currentVideoIdx === experimentData.showAfterVideoIdx) {
         router.push(
           `/ead/${experimentData.id}/${experimentData.skipEnabled ? "1" : "0"}`
         );
@@ -83,7 +83,7 @@ function Page({ params }: { params: { experimentId: string } }) {
         experimentData.currentVideoIdx ===
         experimentData.watchListVO.videos.length - 1
       ) {
-        router.push(`esurvey/${experimentData.id}`);
+        router.push(`/esurvey/${experimentData.id}`);
       } else {
         setExperimentData({
           ...experimentData,
@@ -97,6 +97,16 @@ function Page({ params }: { params: { experimentId: string } }) {
     return (
       <div className="w-full h-full bg-black text-2xl flex justify-center items-center">
         Loading...
+      </div>
+    );
+  }
+
+  if (
+    experimentData.currentVideoIdx === experimentData.watchListVO.videos.length
+  ) {
+    return (
+      <div className="w-full h-full flex justify-center items-center text-center text-3xl">
+        Session complete. Thank you for your participation!
       </div>
     );
   }
