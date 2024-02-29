@@ -81,7 +81,6 @@ function AdminWatchListUpdatePage({
     }
 
     const data = (await response.json()).data;
-    console.log(data);
     setNextPageToken(data.nextPageToken);
     setSearchedVideos([...searchedVideos, ...data.videos]);
   };

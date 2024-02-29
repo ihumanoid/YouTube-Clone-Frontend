@@ -36,7 +36,6 @@ function AdminExperimentEditWindow({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    console.log(e.target);
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,

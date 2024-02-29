@@ -18,7 +18,6 @@ const ESurvey = ({ experimentId }: ESurveyProps) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setResponses({ ...responses, [e.target.name]: e.target.value });
-    console.log(responses);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,9 +57,10 @@ const ESurvey = ({ experimentId }: ESurveyProps) => {
         {/* Question 1: Rating */}
         <div className="mb-6">
           <label htmlFor="rating" className="block text-lg font-medium mb-2">
-            On a scale of 1 to 10, rate the advertisement
+            An advertisement was inserted into the list of videos you just
+            watched. On a scale of 1 to 5, please rate the advertisement
           </label>
-          {[...Array(10)].map((_, index) => (
+          {[...Array(5)].map((_, index) => (
             <label key={index} className="inline-flex items-center mr-4">
               <input
                 type="radio"

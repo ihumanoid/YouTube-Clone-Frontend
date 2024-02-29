@@ -22,13 +22,13 @@ function Navbar() {
       }
 
       const watchLists = (await response.json()).data;
-      console.log("fetch via navbar" + watchLists);
+      // console.log("fetch via navbar" + watchLists);
       dispatch(changeAllWatchLists(watchLists));
     };
     if (watchListState.watchLists.length === 0) {
       fetchWatchLists();
     } else {
-      console.log(watchListState.watchLists);
+      // console.log(watchListState.watchLists);
     }
   }, []);
 

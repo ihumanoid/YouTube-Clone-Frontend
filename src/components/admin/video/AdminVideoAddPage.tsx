@@ -26,7 +26,6 @@ function AdminVideoAddPage() {
   };
 
   const loadMore = async function () {
-    console.log(nextPageToken);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/video/search?keyword=${keyword}&pageToken=${nextPageToken}`
     );
@@ -38,7 +37,6 @@ function AdminVideoAddPage() {
 
     setNextPageToken(data.nextPageToken);
     setSearchedVideos([...searchedVideos, ...data.videos]);
-    console.log(data.videos);
   };
 
   const addToBasket = (video: Video) => {

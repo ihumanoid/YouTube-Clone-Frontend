@@ -35,7 +35,6 @@ function Page({
       }
 
       const watchLists = (await response.json()).data;
-      console.log("fetch via navbar" + watchLists);
       dispatch(changeAllWatchLists(watchLists));
     };
     if (watchLists.length === 0) {
