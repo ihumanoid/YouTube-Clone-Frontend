@@ -30,6 +30,7 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
   const [watchTime, setWatchTime] = useState(0);
   const [numSkipsAhead, setNumSkipsAhead] = useState(0);
   const [numSkipsBehind, setNumSkipsBehind] = useState(0);
+  const [showPauseWindow, setShowPauseWindow] = useState(false);
 
   const handleProgress = (progress: any) => {
     if (progress.playedSeconds > 0) {
@@ -45,38 +46,40 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
     //   return;
     // }
     if (progress.playedSeconds - prevPlayedSeconds >= 2) {
-      console.log(
-        "User has skipped ahead " +
-          Math.floor(progress.playedSeconds - prevPlayedSeconds)
-      );
-      setNumSkipsAhead((prev) => prev + 1);
-      setWatchTime(
-        (prev) => prev - Math.floor(progress.playedSeconds - prevPlayedSeconds)
-      );
+      // console.log(
+      //   "User has skipped ahead " +
+      //     Math.floor(progress.playedSeconds - prevPlayedSeconds)
+      // );
+      // setNumSkipsAhead((prev) => prev + 1);
+      // setWatchTime(
+      //   (prev) => prev - Math.floor(progress.playedSeconds - prevPlayedSeconds)
+      // );
     }
     if (progress.playedSeconds - prevPlayedSeconds <= -2) {
       // console.log(
       //   "User has skipped behind " +
       //     Math.floor(progress.playedSeconds - prevPlayedSeconds)
       // );
-      setNumSkipsBehind((prev) => prev + 1);
-      setWatchTime(
-        (prev) => prev - Math.floor(progress.playedSeconds - prevPlayedSeconds)
-      );
+      // setNumSkipsBehind((prev) => prev + 1);
+      // setWatchTime(
+      //   (prev) => prev - Math.floor(progress.playedSeconds - prevPlayedSeconds)
+      // );
     }
     setPrevPlayedSeconds(progress.playedSeconds);
   };
 
   const handlePlay = () => {
-    clearTimeout(pauseTimeoutRef.current);
-    setUninitialized(false);
+    window.clearTimeout(pauseTimeoutRef.current);
     setPlaying(true);
+    setShowPauseWindow(false);
+    setUninitialized(false);
   };
 
   const handlePause = () => {
     window.clearTimeout(pauseTimeoutRef.current);
     pauseTimeoutRef.current = window.setTimeout(() => {
       setPlaying(false);
+      setShowPauseWindow(true);
     }, 600);
   };
 
@@ -98,9 +101,9 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
   };
 
   const handleEnd = () => {
-    console.log(
-      `liked=${liked} disliked=${disliked} numSkipsAhead=${numSkipsAhead} numSkipsBehind=${numSkipsBehind} watchTime=${watchTime}`
-    );
+    // console.log(
+    //   `liked=${liked} disliked=${disliked} numSkipsAhead=${numSkipsAhead} numSkipsBehind=${numSkipsBehind} watchTime=${watchTime}`
+    // );
     updateVideoData(watchTime, numSkipsAhead, numSkipsBehind, liked, disliked);
   };
 
@@ -158,16 +161,17 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
           </div>
         )}
         {/* Block More Shorts */}
-        {!playing && !uninitialized && (
+        {showPauseWindow && (
           <div
-            className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-screen flex flex-col items-center justify-center bg-black gap-4 transition duration-1000
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-96 flex flex-col items-center justify-center bg-black gap-4 transition duration-1000
           
         `}
-          ></div>
+          />
         )}
+
         <div
-          className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-screen flex flex-col items-center justify-center bg-black gap-4 transition duration-1000 ${
-            (playing || uninitialized) && "-translate-x-[2500px] "
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-96 flex flex-col items-center justify-center bg-black gap-4 transition duration-1000 ${
+            showPauseWindow || "-translate-x-[3500px] "
           }`}
         >
           <div className="text-[40px] font-semibold text-[#F9F9F9] text-center">
@@ -210,7 +214,7 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
             </button>
             <button
               className="px-4 py-2 text-white rounded focus:outline-none hover:text-[#B9B9B9]"
-              onClick={handlePlay}
+              onClick={() => setPlaying(true)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -252,7 +256,7 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
           youtube: {
             playerVars: {
               // disablekb: 1, // Disable keyboard controls
-              // fs: 0, // Disable full screen
+              fs: 0, // Disable full screen
             },
           },
         }}
@@ -266,7 +270,6 @@ function EVideoPlayer({ youtubeId, updateVideoData }: EVideoPlayerProps) {
         onEnded={handleEnd}
         playing={playing}
         onDuration={(d) => setWatchTime(d)}
-        onKeyDown={() => console.log("detected keydown")}
       />
     </div>
   );

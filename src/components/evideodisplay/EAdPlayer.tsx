@@ -74,13 +74,13 @@ function EAdPlayer({
         {/* Block More Shorts Popup */}
         {!playing && !uninitialized && (
           <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-96 flex flex-col items-center justify-center bg-black gap-4 transition duration-1000
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex flex-col items-center justify-center bg-black gap-4 transition duration-1000
           
         `}
           ></div>
         )}
         <div
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-96 flex flex-col items-center justify-center bg-black gap-4 transition duration-1000 ${
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex flex-col items-center justify-center bg-black gap-4 transition duration-1000 ${
             (playing || uninitialized) && "-translate-x-[2500px]"
           }`}
         >
@@ -121,14 +121,14 @@ function EAdPlayer({
         {skipEnabled && playedSeconds >= 5 && (
           <button
             onClick={() => handleEnd(true)}
-            className="group absolute w-40 h-16 right-0 bottom-4 bg-black border border-white flex items-center justify-center gap-2 text-2xl text-gray-200 hover:text-gray-400 hover:bg-[#101010] rounded-md cursor-pointer"
+            className="group absolute w-40 h-12 right-0 bottom-2 bg-black border border-white flex items-center justify-center gap-2 text-3xl text-gray-200 hover:text-gray-400 hover:bg-[#101010] rounded-md cursor-pointer"
           >
             Skip Ad
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 512 512"
-              width={25}
-              height={25}
+              width={30}
+              height={30}
               className="text-gray-200 fill-current group-hover:text-gray-400"
             >
               <path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3V256v41.7L52.5 440.6zM256 352V256 128 96c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29V352z" />
@@ -163,7 +163,6 @@ function EAdPlayer({
         onEnded={() => handleEnd(false)}
         onDuration={(duration) => setTotalSeconds(duration)}
         playing={playing}
-        onKeyDown={() => console.log("detected keydown")}
       />
     </div>
   );

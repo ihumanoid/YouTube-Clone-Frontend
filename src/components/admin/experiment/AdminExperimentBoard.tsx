@@ -150,7 +150,9 @@ function AdminExperimentBoard() {
                   {item.participantId}
                 </td>
                 <td className="border border-gray-400 px-4 py-2">
-                  {item.watchListTitle}
+                  <div className="w-full h-full line-clamp-1">
+                    {item.watchListTitle}
+                  </div>
                 </td>
                 <td className="border border-gray-400 px-4 py-2">
                   {item.currentVideoIdx}
