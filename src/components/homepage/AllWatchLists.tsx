@@ -17,13 +17,13 @@ function AllWatchLists() {
   );
 
   return (
-    <div className="bg-black w-full flex flex-wrap gap-4 overflow-scroll justify-start items-start max-lg:justify-center pl-8 py-8">
+    <div className="bg-[#303030] w-full flex flex-wrap gap-4 overflow-scroll justify-start items-start max-lg:justify-center pl-8 py-8">
       {filteredWatchLists.map((watchList) => {
         return (
           <button
             onClick={() => router.push("" + watchList.id)}
             key={watchList.id}
-            className="flex items-center justify-center h-48 w-98 bg-[#151515] hover:bg-[#202020] ml-4"
+            className="flex items-center justify-center h-48 w-98 bg-[#151515] hover:scale-105 transition-all ml-4"
           >
             <div className="flex-shrink-0 w-1/2">
               <div className="p-4">
