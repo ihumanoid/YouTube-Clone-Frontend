@@ -18,6 +18,18 @@ function Page({ params }: { params: { experimentId: string } }) {
   );
   const router = useRouter();
 
+  const handleDoneWatching = async () => {
+    if (!experimentData) {
+      return;
+    }
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/checkSurvey?experimentId=${experimentData.id}`;
+    const response = await fetch(url);
+    const json = await response.json();
+    if (!json.data) {
+      router.push(`/esurvey/${experimentData.id}`);
+    }
+  };
+
   useEffect(() => {
     const fetchExperimentData = async () => {
       const response = await fetch(
@@ -27,7 +39,11 @@ function Page({ params }: { params: { experimentId: string } }) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const data = (await response.json()).data;
+      const json = await response.json();
+      const data = json.data;
+      console.log(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment?experimentId=${params.experimentId}`
+      );
       setExperimentData(data);
     };
 
@@ -101,9 +117,11 @@ function Page({ params }: { params: { experimentId: string } }) {
     );
   }
 
+  // if done watching all videos, show thank-you page or redirect to survey
   if (
     experimentData.currentVideoIdx === experimentData.watchListVO.videos.length
   ) {
+    handleDoneWatching();
     return (
       <div className="w-full h-full flex justify-center items-center text-center text-3xl">
         Session complete. Thank you for your participation!
@@ -113,12 +131,15 @@ function Page({ params }: { params: { experimentId: string } }) {
 
   const currentYoutubeId =
     experimentData.watchListVO.videos[experimentData.currentVideoIdx].youtubeId;
+  const currentVideoTitle =
+    experimentData.watchListVO.videos[experimentData.currentVideoIdx].title;
 
   return (
     <div className="w-full h-full flex justify-center items-center">
       <EVideoPlayer
         youtubeId={currentYoutubeId}
         updateVideoData={updateVideoData}
+        videoTitle={currentVideoTitle}
       />
     </div>
   );

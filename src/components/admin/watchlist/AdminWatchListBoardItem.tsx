@@ -16,6 +16,7 @@ function AdminWatchListBoardItem({
 }: AdminWatchListBoardItemProps) {
   const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const deleteWatchList = async (watchListId: number, withVideos: boolean) => {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/watchlist?id=${watchListId}&withVideos=${withVideos}`;
@@ -25,10 +26,16 @@ function AdminWatchListBoardItem({
         "Content-Type": "application/json",
       },
     });
+    const json = await response.json();
+    if (json.code === 409) {
+      setShowError(true);
+      return;
+    }
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     fetchWatchLists();
+    setShowConfirm(false);
   };
 
   return (
@@ -40,7 +47,10 @@ function AdminWatchListBoardItem({
             <p className="text-center text-xl font-bold mt-12 mb-2 z-10">
               Confirm Delete
               <button
-                onClick={() => setShowConfirm(false)}
+                onClick={() => {
+                  setShowConfirm(false);
+                  setShowError(false);
+                }}
                 className="absolute top-2 right-2 w-8 h-8 cursor-pointer hover:text-[#d5cfcf]"
               >
                 X
@@ -48,18 +58,25 @@ function AdminWatchListBoardItem({
             </p>
             <div className="flex justify-center gap-8 px-4">
               <button
-                className="text-lg bg-white w-36 text-[#323264] p-2 font-bold mt-10 rounded-2xl hover:bg-[#d5cfcf]"
+                className="text-md bg-white w-36 text-[#323264] p-2 font-bold mt-10 rounded-2xl hover:bg-[#d5cfcf]"
                 onClick={() => deleteWatchList(watchList.id, false)}
               >
                 Delete
               </button>
               <button
-                className="text-lg w-36 bg-white text-[#323264] p-2 font-bold mt-10 rounded-2xl hover:bg-[#d5cfcf]"
+                className="text-md w-36 bg-white text-[#323264] p-2 font-bold mt-10 rounded-2xl hover:bg-[#d5cfcf]"
                 onClick={() => deleteWatchList(watchList.id, true)}
               >
                 Delete with Unused Videos
               </button>
             </div>
+            {showError && (
+              <div className="flex justify-center px-4 py-2">
+                <div className="text-red-600 text-center">
+                  Delete Failed: Some Experiment Entries Use This Watch List
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -111,7 +128,7 @@ function AdminWatchListBoardItem({
             <button
               className="hover:underline"
               onClick={() =>
-                router.push(`/admin/watchlists/manage/${watchList.id}`)
+                router.push(`/nimda/watchlists/manage/${watchList.id}`)
               }
             >
               Manage

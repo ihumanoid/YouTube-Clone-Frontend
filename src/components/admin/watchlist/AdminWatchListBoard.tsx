@@ -77,7 +77,7 @@ function AdminWatchListBoard() {
             Search
           </button>
         </div>
-        <Link href="/admin/watchlists/add">
+        <Link href="/nimda/watchlists/add">
           <button className="bg-black px-4 w-20 h-12 rounded-xl font-bold hover:bg-[#202020]">
             Create
           </button>

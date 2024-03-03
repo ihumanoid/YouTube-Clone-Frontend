@@ -124,7 +124,7 @@ function AdminWatchListUpdatePage({
     });
 
     if (response.ok) {
-      router.push("/admin/watchlists");
+      router.push("/nimda/watchlists");
     }
   };
 
@@ -250,7 +250,7 @@ function AdminWatchListUpdatePage({
           >
             Update
           </button>
-          <Link href="/admin/watchlists">
+          <Link href="/nimda/watchlists">
             <button className="bg-black px-4 w-22 h-12 rounded-xl font-bold hover:bg-[#202020]">
               Cancel
             </button>

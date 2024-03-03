@@ -115,15 +115,8 @@ function AdminExperimentEditWindow({
                 value={formData.id}
                 onChange={handleChange}
                 className="text-black p-1 w-32"
+                disabled
               />
-              <button
-                className="border border-1 border-black bg-gray-500 p-1 ml-1"
-                onClick={() =>
-                  setFormData((prev) => ({ ...prev, id: getRandomId() }))
-                }
-              >
-                randomize
-              </button>
             </div>
             <div className="mb-4">
               <label className="block mb-1">Participant ID:</label>

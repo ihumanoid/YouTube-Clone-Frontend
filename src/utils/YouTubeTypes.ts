@@ -73,7 +73,7 @@ export interface VideoDataDTO {
 }
 
 export interface AdvertisementDataDTO {
-  participantId: string;
+  experimentId: string;
   watchListId: number;
   skipEnabled: boolean;
   skipped: boolean;

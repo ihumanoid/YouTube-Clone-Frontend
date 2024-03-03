@@ -27,6 +27,7 @@ function AdminExperimentAddWindow({
   const [filteredWatchLists, setFilteredWatchLists] = useState<WatchListVO[]>(
     []
   );
+  const [showError, setShowError] = useState(false);
 
   const fetchWatchLists = async () => {
     const response = await fetch(
@@ -77,6 +78,10 @@ function AdminExperimentAddWindow({
       },
       body: JSON.stringify(formData),
     });
+    if (response.status === 409) {
+      setShowError(true);
+      return;
+    }
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -279,6 +284,13 @@ function AdminExperimentAddWindow({
             Cancel
           </button>
         </div>
+        {showError && (
+          <div className="flex justify-center px-4 py-2">
+            <div className="text-red-600 text-center">
+              Insert Failed: Entries with the same ID already exists!
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -11,10 +11,14 @@ function AllWatchLists() {
     (state) => state.watchListSliceReducer
   );
   const watchLists = watchListState.watchLists;
+  const keyword = watchListState.keyword;
+  const filteredWatchLists = watchLists.filter((watchList) =>
+    watchList.title.toLowerCase().includes(keyword.toLowerCase())
+  );
 
   return (
     <div className="bg-black w-full flex flex-wrap gap-4 overflow-scroll justify-start items-start max-lg:justify-center pl-8 py-8">
-      {watchLists.map((watchList) => {
+      {filteredWatchLists.map((watchList) => {
         return (
           <button
             onClick={() => router.push("" + watchList.id)}

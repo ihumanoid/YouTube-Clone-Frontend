@@ -6,14 +6,7 @@ import AdminExperimentEditWindow from "./AdminExperimentEditWindow";
 import AdminExperimentDeleteConfirm from "./AdminExperimentConfirmDelete";
 import Link from "next/link";
 
-const FilterTypes = [
-  "ID",
-  "Participant ID",
-  "Watch List ID",
-  "Current Video Index",
-  "Ad Skip Enabled",
-  "Show After Video Index",
-];
+const FilterTypes = ["ID", "Participant ID", "Watch List"];
 
 function AdminExperimentBoard() {
   const [showAddWindow, setShowAddWindow] = useState(false);
@@ -32,6 +25,10 @@ function AdminExperimentBoard() {
       skipEnabled: false,
       showAfterVideoIdx: 0,
     });
+  const [keyword, setKeyword] = useState("");
+  const [filter, setFilter] = useState("ID");
+  const [filteredExperimentDataTable, setFilteredExperimentDataTable] =
+    useState<ExperimentData[]>([]);
 
   const handleEdit = (experimentData: ExperimentData) => {
     setSelectedExperimentData(experimentData);
@@ -43,6 +40,26 @@ function AdminExperimentBoard() {
     setShowDeleteConfirm(true);
   };
 
+  const handleSearch = () => {
+    const newFilteredExperimentDataTable = experimentDataTable.filter(
+      (entry) => {
+        switch (filter) {
+          case "ID":
+            return entry.id.toLowerCase().includes(keyword.toLowerCase());
+          case "Participant ID":
+            return entry.participantId
+              .toLowerCase()
+              .includes(keyword.toLowerCase());
+          default:
+            return entry.watchListTitle
+              .toLowerCase()
+              .includes(keyword.toLowerCase());
+        }
+      }
+    );
+    setFilteredExperimentDataTable(newFilteredExperimentDataTable);
+  };
+
   const fetchExperimentData = async () => {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/allExperiments`;
     const response = await fetch(url);
@@ -51,6 +68,7 @@ function AdminExperimentBoard() {
     }
     const json = await response.json();
     setExperimentDataTable(json.data);
+    setFilteredExperimentDataTable(json.data);
   };
 
   useEffect(() => {
@@ -87,20 +105,24 @@ function AdminExperimentBoard() {
             <input
               type="text"
               placeholder="Filter by"
-              className="bg-black px-2 text-sm h-12 w-32"
+              className="bg-black px-2 text-sm h-12 w-40"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-              className="fill-current bg-[#101010] text-white h-12 p-2 hover:bg-[#202020] cursor-pointer"
-            >
-              <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-            </svg>
+            <button onClick={handleSearch}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                className="fill-current bg-[#101010] text-white h-12 p-2 hover:bg-[#202020] cursor-pointer"
+              >
+                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              </svg>
+            </button>
           </div>
-          <select className="bg-black px-2 text-sm w-32 h-12 rounded-xl font-bold cursor-pointer ml-1 mr-4">
-            <option value="" selected>
-              None
-            </option>
+          <select
+            className="bg-black px-2 text-xs w-32 h-12 rounded-xl font-bold cursor-pointer ml-1 mr-4"
+            onChange={(e) => setFilter(e.target.value)}
+          >
             {FilterTypes.map((filter) => (
               <option value={filter} key={filter}>
                 {filter}
@@ -143,7 +165,7 @@ function AdminExperimentBoard() {
             </tr>
           </thead>
           <tbody>
-            {experimentDataTable.map((item) => (
+            {filteredExperimentDataTable.map((item) => (
               <tr key={item.id}>
                 <td className="border border-gray-400 px-4 py-2">{item.id}</td>
                 <td className="border border-gray-400 px-4 py-2">
