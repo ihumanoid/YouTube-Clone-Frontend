@@ -134,7 +134,7 @@ function AdminWatchListAddPage() {
     setBasketVideos([]);
     setBasketCommercial(null);
     setShowConfirm(false);
-    router.push("/admin/watchlists");
+    router.push("/nimda/watchlists");
   };
 
   useEffect(() => {
@@ -247,7 +247,7 @@ function AdminWatchListAddPage() {
           >
             Create
           </button>
-          <Link href="/admin/watchlists">
+          <Link href="/nimda/watchlists">
             <button className="bg-black px-4 w-22 h-12 rounded-xl font-bold hover:bg-[#202020]">
               Cancel
             </button>

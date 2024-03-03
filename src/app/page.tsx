@@ -3,7 +3,7 @@ import Navbar from "../components/homepage/Navbar";
 import Feed from "../components/homepage/Feed";
 import AllFeed from "@/components/homepage/AllFeed";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { changeAllWatchLists } from "@/lib/features/watchListSlice";
 
 export default function Home() {

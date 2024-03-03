@@ -126,7 +126,7 @@ function AdminVideoAddPage() {
           >
             Add
           </button>
-          <Link href="/admin/videos">
+          <Link href="/nimda/videos">
             <button className="bg-black px-4 w-20 h-12 rounded-xl font-bold hover:bg-[#202020]">
               Cancel
             </button>

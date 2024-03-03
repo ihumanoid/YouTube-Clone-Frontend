@@ -3,10 +3,12 @@ import { WatchListVO } from "@/utils/YouTubeTypes";
 
 export interface WatchListReducerState {
   watchLists: WatchListVO[];
+  keyword: string;
 }
 
 const initialState: WatchListReducerState = {
   watchLists: [],
+  keyword: "",
 };
 
 export const watchListSlice = createSlice({
@@ -19,8 +21,14 @@ export const watchListSlice = createSlice({
         watchLists: action.payload,
       };
     },
+    changeKeyword: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        keyword: action.payload,
+      };
+    },
   },
 });
 
-export const { changeAllWatchLists } = watchListSlice.actions;
+export const { changeAllWatchLists, changeKeyword } = watchListSlice.actions;
 export const watchListSliceReducer = watchListSlice.reducer;

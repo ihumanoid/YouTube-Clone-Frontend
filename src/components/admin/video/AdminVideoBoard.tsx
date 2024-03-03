@@ -112,7 +112,7 @@ function AdminVideoBoard() {
         </div>
 
         <div className="flex gap-4">
-          <Link href="/admin/videos/add">
+          <Link href="/nimda/videos/add">
             <button className="bg-black px-4 w-20 h-12 rounded-xl font-bold hover:bg-[#202020]">
               Add
             </button>

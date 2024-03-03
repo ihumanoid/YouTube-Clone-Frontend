@@ -53,7 +53,7 @@ function Page({
 
   const updateAdvertisementData = async (skipped: boolean) => {
     const advertisementData: AdvertisementDataDTO = {
-      participantId: experimentData.participantId,
+      experimentId: experimentId,
       watchListId: experimentData.watchListId,
       skipEnabled,
       skipped,
