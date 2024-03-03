@@ -141,13 +141,13 @@ function AdminExperimentBoard() {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="border border-gray-400 px-4 py-2 min-w-16 max-w-32">
+              <th className="border border-gray-400 px-4 py-2 w-40 max-w-40">
                 ID
               </th>
-              <th className="border border-gray-400 px-4 py-2 min-w-16 max-w-32">
+              <th className="border border-gray-400 px-4 py-2 w-40 max-w-40">
                 Participant ID
               </th>
-              <th className="border border-gray-400 px-4 py-2 min-w-16 max-w-32">
+              <th className="border border-gray-400 px-4 py-2 w-40 max-w-40">
                 Watch List
               </th>
               <th className="border border-gray-400 px-4 py-2 min-w-16 max-w-32">
@@ -167,11 +167,13 @@ function AdminExperimentBoard() {
           <tbody>
             {filteredExperimentDataTable.map((item) => (
               <tr key={item.id}>
-                <td className="border border-gray-400 px-4 py-2">{item.id}</td>
-                <td className="border border-gray-400 px-4 py-2">
+                <td className="border border-gray-400 px-4 py-2 w-40 max-w-40 truncate">
+                  {item.id}
+                </td>
+                <td className="border border-gray-400 px-4 py-2 w-40 max-w-40 truncate">
                   {item.participantId}
                 </td>
-                <td className="border border-gray-400 px-4 py-2">
+                <td className="border border-gray-400 px-4 py-2 w-40 max-w-40 truncate">
                   <div className="w-full h-full line-clamp-1">
                     {item.watchListTitle}
                   </div>
