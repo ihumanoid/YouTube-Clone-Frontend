@@ -41,9 +41,6 @@ function Page({ params }: { params: { experimentId: string } }) {
 
       const json = await response.json();
       const data = json.data;
-      console.log(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment?experimentId=${params.experimentId}`
-      );
       setExperimentData(data);
     };
 

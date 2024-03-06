@@ -41,20 +41,20 @@ function EVideoPlayer({
       setHideWatchOnYouTube(false);
     }
     if (progress.playedSeconds - prevPlayedSeconds >= 2) {
-      console.log(
-        "User has skipped ahead " +
-          Math.floor(progress.playedSeconds - prevPlayedSeconds)
-      );
+      // console.log(
+      //   "User has skipped ahead " +
+      //     Math.floor(progress.playedSeconds - prevPlayedSeconds)
+      // );
       setNumSkipsAhead((prev) => prev + 1);
       setWatchTime(
         (prev) => prev - Math.floor(progress.playedSeconds - prevPlayedSeconds)
       );
     }
     if (progress.playedSeconds - prevPlayedSeconds <= -2) {
-      console.log(
-        "User has skipped behind " +
-          Math.floor(progress.playedSeconds - prevPlayedSeconds)
-      );
+      // console.log(
+      //   "User has skipped behind " +
+      //     Math.floor(progress.playedSeconds - prevPlayedSeconds)
+      // );
       setNumSkipsBehind((prev) => prev + 1);
       setWatchTime(
         (prev) => prev - Math.floor(progress.playedSeconds - prevPlayedSeconds)
