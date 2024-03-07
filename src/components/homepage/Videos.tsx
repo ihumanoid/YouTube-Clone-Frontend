@@ -29,7 +29,7 @@ function Videos({ watchListId }: VideoProps) {
   const videos = watchListState.watchLists[watchListIdx]?.videos;
 
   return (
-    <div className="bg-[#303030] w-full flex flex-wrap gap-x-12 gap-y-4 overflow-scroll justify-start max-lg:justify-center pl-8 py-8">
+    <div className="bg-[#303030] w-full flex flex-wrap gap-x-16 gap-y-8 overflow-scroll justify-start max-lg:justify-center pl-8 py-8">
       {videos.map(
         ({ title, thumbnailUrl, channelTitle, duration, youtubeId }) => {
           return (

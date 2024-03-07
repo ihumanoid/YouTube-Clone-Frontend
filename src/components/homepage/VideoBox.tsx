@@ -21,11 +21,11 @@ function VideoBox({
 }: VideoBoxProps) {
   return (
     <Link href={`/video/${watchListId}/${youtubeId}`}>
-      <div className="bg-[#151515] h-64 w-80 flex flex-wrap rounded-xl justify-center transition-all hover:scale-105">
+      <div className="bg-[#151515] h-72 w-80 flex flex-wrap rounded-xl justify-center transition-all hover:scale-105">
         <Image
           src={thumbnailUrl}
           alt="thumbnail"
-          width={370}
+          width={300}
           height={200}
           className="rounded-t-xl"
         />
