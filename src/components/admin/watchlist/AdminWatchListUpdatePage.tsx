@@ -1,17 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import {
-  Video,
-  VideoTopic,
-  WatchListDTO,
-  WatchListVO,
-} from "@/utils/YouTubeTypes";
+import { Video, VideoTopic, WatchListVideosVO } from "@/utils/YouTubeTypes";
 import AdminWatchListShoppingBasket from "./AdminWatchListShoppingBasket";
 import AdminWatchListSearchBasket from "./AdminWatchListSearchBasket";
 import { useAppSelector } from "@/lib/store";
 import { WatchListReducerState } from "@/lib/features/watchListSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { VideoTopics } from "@/utils/RealData";
 
 enum SourceValues {
@@ -19,29 +14,16 @@ enum SourceValues {
   Database = "DataBase",
 }
 
-interface AdminWatchListUpdatePageProps {
-  watchListId: number;
-}
-
-function AdminWatchListUpdatePage({
-  watchListId,
-}: AdminWatchListUpdatePageProps) {
+function AdminWatchListUpdatePage() {
   // initial states
-  const watchListState: WatchListReducerState = useAppSelector(
-    (state) => state.watchListSliceReducer
-  );
-  let initialBasketVideos: Video[] = [];
-  let initialBasketCommercial = null;
-  let initialWatchListTitle = "";
-  if (watchListId !== -1) {
-    const watchListIdx = watchListState.watchLists.findIndex(
-      (watchList) => watchList.id === watchListId
-    );
-    const watchList = watchListState.watchLists[watchListIdx];
-    initialBasketVideos = watchList.videos;
-    initialBasketCommercial = watchList.commercial;
-    initialWatchListTitle = watchList.title;
+  const searchParams = useSearchParams();
+  const watchListString = searchParams.get("watchList");
+  if (!watchListString) {
+    throw new Error("missing search param 'watchList'");
   }
+  const watchList: WatchListVideosVO = JSON.parse(watchListString);
+  const initialBasketVideos = watchList.videos;
+  const initialWatchListTitle = watchList.title;
 
   // define variables
   const [keyword, setKeyword] = useState("");
@@ -49,11 +31,7 @@ function AdminWatchListUpdatePage({
   const [searchedVideos, setSearchedVideos] = useState<Video[]>([]);
   const [basketVideos, setBasketVideos] =
     useState<Video[]>(initialBasketVideos);
-  const [basketCommercial, setBasketCommercial] = useState<Video | null>(
-    initialBasketCommercial
-  );
   const [nextPageToken, setNextPageToken] = useState<string>("");
-  const [showAfterVideo, setShowAfterVideo] = useState(1);
   const [watchListTitle, setWatchListTitle] = useState(initialWatchListTitle);
   const router = useRouter();
 
@@ -141,16 +119,10 @@ function AdminWatchListUpdatePage({
   };
 
   const updateWatchList = async () => {
-    if (!basketCommercial) {
-      return;
-    }
-
-    const watchList: WatchListVO = {
-      id: watchListId,
+    const updatedWatchList: WatchListVideosVO = {
+      id: watchList.id,
       title: watchListTitle,
       length: basketVideos.length,
-      commercial: basketCommercial,
-      showAfterVideoIdx: showAfterVideo - 1,
       videos: basketVideos,
     };
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/watchlist`;
@@ -159,20 +131,12 @@ function AdminWatchListUpdatePage({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(watchList),
+      body: JSON.stringify(updatedWatchList),
     });
 
     if (response.ok) {
       router.push("/nimda/watchlists");
     }
-  };
-
-  const selectCommercial = (video: Video) => {
-    setBasketCommercial(video);
-  };
-
-  const unselectCommercial = () => {
-    setBasketCommercial(null);
   };
 
   // use effect
@@ -233,8 +197,8 @@ function AdminWatchListUpdatePage({
             onChange={handleSelectSource}
             className="bg-black px-2 text-sm w-22 h-12 rounded-xl font-bold cursor-pointer"
           >
-            <option value="YouTube">YouTube</option>
-            <option value="Database">Database</option>
+            <option value={SourceValues.YouTube}>YouTube</option>
+            <option value={SourceValues.Database}>Database</option>
           </select>
           <div className="relative">
             <input
@@ -271,11 +235,7 @@ function AdminWatchListUpdatePage({
             onClick={() => {
               setShowConfirm(true);
             }}
-            disabled={
-              basketVideos.length === 0 ||
-              !selectCommercial ||
-              showAfterVideo === -1
-            }
+            disabled={basketVideos.length === 0}
           >
             Update
           </button>
@@ -292,17 +252,12 @@ function AdminWatchListUpdatePage({
           addToBasket={addToBasket}
           loadMore={loadMore}
           showLoadMore={selectedSource === SourceValues.YouTube}
-          selectCommercial={selectCommercial}
         />
 
         <AdminWatchListShoppingBasket
           setBasketVideos={setBasketVideos}
           videos={basketVideos}
-          commercial={basketCommercial}
           removeFromBasket={removeFromBasket}
-          unselectCommercial={unselectCommercial}
-          showAfterVideo={showAfterVideo}
-          setShowAfterVideo={setShowAfterVideo}
         />
       </div>
     </div>

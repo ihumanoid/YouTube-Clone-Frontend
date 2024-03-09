@@ -19,9 +19,16 @@ function Navbar() {
     dispatch(changeKeyword(keyword));
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    console.log("On key down");
+    if (e.key === "Enter" && keyword.length > 0) {
+      handleSearch();
+    }
+  };
+
   useEffect(() => {
     if (keyword.length === 0) {
-      dispatch(changeKeyword(keyword));
+      handleSearch();
     }
   }, [keyword]);
 
@@ -58,6 +65,7 @@ function Navbar() {
           value={keyword}
           placeholder="Search watch list"
           onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={handleKeyDown}
         ></input>
         <button onClick={handleSearch}>
           <svg

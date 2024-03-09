@@ -8,7 +8,6 @@ function AdminVideoBoard() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [deleteIds, setDeleteIds] = useState<number[]>([]);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [filterActive, setFilterActive] = useState(false);
   const [filteredVideos, setFilteredVideos] = useState<Video[]>([]);
 
   const getVideos = async () => {
@@ -17,6 +16,7 @@ function AdminVideoBoard() {
     );
     const data = (await response.json()).data;
     setVideos(data);
+    setFilteredVideos(data);
   };
 
   useEffect(() => {
@@ -49,22 +49,25 @@ function AdminVideoBoard() {
   };
 
   const filterVideos = () => {
-    if (!keyword) {
-      setFilterActive(false);
-      return;
-    }
-    setFilterActive(true);
     const newFilteredVideos = videos.filter((video) =>
       video.title.toLowerCase().includes(keyword.toLowerCase())
     );
     setFilteredVideos(newFilteredVideos);
   };
 
-  useEffect(() => {
-    if (keyword.length === 0) {
-      setFilterActive(false);
+  const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newKeyword = e.target.value;
+    if (!newKeyword) {
+      setFilteredVideos(videos);
     }
-  }, [keyword]);
+    setKeyword(newKeyword);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      filterVideos();
+    }
+  };
 
   return (
     <div className="bg-[#303030]  h-full flex flex-col p-10 flex-1">
@@ -98,9 +101,8 @@ function AdminVideoBoard() {
           <input
             className="w-72 h-12 text-black px-2"
             value={keyword}
-            onChange={(e) => {
-              setKeyword(e.target.value);
-            }}
+            onChange={handleKeywordChange}
+            onKeyDown={handleKeyDown}
             placeholder="Search videos"
           ></input>
           <button
@@ -136,17 +138,15 @@ function AdminVideoBoard() {
           </div>
         ) : (
           <ul className="overflow-auto">
-            {(filterActive ? filteredVideos : videos).map(
-              (video: Video, idx) => {
-                return (
-                  <AdminVideoBox
-                    toggleDeleteId={toggleDeleteId}
-                    video={video}
-                    key={idx}
-                  />
-                );
-              }
-            )}
+            {filteredVideos.map((video: Video, idx) => {
+              return (
+                <AdminVideoBox
+                  toggleDeleteId={toggleDeleteId}
+                  video={video}
+                  key={idx}
+                />
+              );
+            })}
           </ul>
         )}
       </div>

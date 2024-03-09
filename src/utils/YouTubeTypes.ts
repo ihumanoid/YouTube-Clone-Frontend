@@ -8,22 +8,56 @@ export interface Video {
   channelTitle: string;
 }
 
-export interface WatchListVO {
+export interface Commercial {
+  youtubeId: string;
+  title: string;
+  thumbnailUrl: string;
+  duration: string;
+  description: string;
+  channelTitle: string;
+}
+
+export interface WatchListVideosVO {
   id: number;
   title: string;
   length: number;
-  commercial: Video;
-  showAfterVideoIdx: number;
+  videos: Video[];
+}
+
+export interface WatchListCommercialsVO {
+  id: number;
+  title: string;
+  length: number;
+  lowCommercial?: Commercial;
+  mediumCommercial?: Commercial;
+  highCommercial?: Commercial;
+}
+
+export interface WatchListCommercialsVideosVO {
+  id: number;
+  title: string;
+  length: number;
+  lowCommercial: Commercial;
+  mediumCommercial: Commercial;
+  highCommercial: Commercial;
   videos: Video[];
 }
 
 export interface WatchListDTO {
   title: string;
   length: number;
-  commercial: Video;
-  showAfterVideoIdx: number;
   videos: Video[];
 }
+
+// export interface WatchListCommercialVO {
+//   id: number;
+//   title: string;
+//   length: number;
+//   videos: Video[];
+//   lowYoutubeId?: string;
+//   mediumYoutubeId?: string;
+//   highYoutubeId?: string;
+// }
 
 export interface SearchResultListVO {
   nextPageToken: string;
@@ -47,7 +81,9 @@ export interface ExperimentDataVO {
   skipEnabled: boolean;
   showAfterVideoIdx: number;
   currentVideoIdx: number;
-  watchListVO: WatchListVO;
+  watchListVideosVO: WatchListVideosVO;
+  commercialYoutubeId: string;
+  commercialSimilarityLevel: string;
 }
 
 export interface ExperimentData {
@@ -58,6 +94,8 @@ export interface ExperimentData {
   currentVideoIdx: number;
   skipEnabled: boolean;
   showAfterVideoIdx: number;
+  commercialYoutubeId: string;
+  commercialSimilarityLevel: string;
 }
 
 export interface VideoDataDTO {
@@ -89,4 +127,10 @@ export interface SurveyDataDTO {
 export interface VideoTopic {
   id: string;
   topic: string;
+}
+
+export enum SimilarityLevels {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
 }

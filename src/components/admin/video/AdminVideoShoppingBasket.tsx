@@ -1,5 +1,5 @@
 import { Video } from "@/utils/YouTubeTypes";
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
 import { Duration } from "luxon";
 import Link from "next/link";
@@ -32,7 +32,7 @@ function AdminVideoShoppingBasket({
             className="w-full h-20 max-h-20 flex border-b-white border-b-solid border-b-2"
           >
             <div className="relative flex w-30 justify-center bg">
-              <Image
+              <img
                 src={video.thumbnailUrl}
                 alt="Video Thumbnail"
                 width={100}

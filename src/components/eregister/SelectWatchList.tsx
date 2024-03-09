@@ -1,18 +1,24 @@
 "use client";
-import { ExperimentData, WatchListVO } from "@/utils/YouTubeTypes";
+import {
+  ExperimentData,
+  WatchListCommercialsVideosVO,
+} from "@/utils/YouTubeTypes";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { IncrementalCache } from "next/dist/server/lib/incremental-cache";
 
 interface SelectWatchListProps {
   email: string;
   setAssignedWatchList: React.Dispatch<
-    React.SetStateAction<WatchListVO | null>
+    React.SetStateAction<WatchListCommercialsVideosVO | null>
   >;
   setExperimentId: React.Dispatch<React.SetStateAction<string>>;
   incrementPageNum: () => void;
+}
+
+enum CommercialSimilarityLevels {
+  LOW = "LOW",
+  HIGH = "HIGH",
+  MEDIUM = "MEDIUM",
 }
 
 function SelectWatchList({
@@ -21,9 +27,10 @@ function SelectWatchList({
   setExperimentId,
   incrementPageNum,
 }: SelectWatchListProps) {
-  const [watchLists, setWatchLists] = useState<WatchListVO[]>([]);
+  const [watchLists, setWatchLists] = useState<WatchListCommercialsVideosVO[]>(
+    []
+  );
   const [selectedWatchListIdx, setSelectedWatchListIdx] = useState(-1);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchWatchLists = async () => {
@@ -58,6 +65,33 @@ function SelectWatchList({
     randomNum = Math.floor(Math.random() * 10);
     const canSkip = randomNum >= 5;
 
+    // randomize advertisement
+    if (
+      !selectedWatchList.lowCommercial ||
+      !selectedWatchList.mediumCommercial ||
+      !selectedWatchList.highCommercial
+    ) {
+      throw new Error("Server error: commercial youtube id cannot be null");
+    }
+    randomNum = Math.floor(Math.random() * 3);
+    let selectedCommercialYoutubeId = "";
+    let selectedCommercialSimilarityLevel = "";
+    switch (randomNum) {
+      case 0:
+        selectedCommercialYoutubeId = selectedWatchList.lowCommercial.youtubeId;
+        selectedCommercialSimilarityLevel = CommercialSimilarityLevels.LOW;
+      case 1:
+        selectedCommercialYoutubeId =
+          selectedWatchList.mediumCommercial.youtubeId;
+        selectedCommercialSimilarityLevel = CommercialSimilarityLevels.MEDIUM;
+      case 2:
+        selectedCommercialYoutubeId =
+          selectedWatchList.highCommercial.youtubeId;
+        selectedCommercialSimilarityLevel = CommercialSimilarityLevels.HIGH;
+    }
+
+    // To Do: randomize ad index
+
     // create experiment data object
     const experimentId = email.split("@")[0] + new Date().getTime();
     setExperimentId(experimentId);
@@ -69,6 +103,8 @@ function SelectWatchList({
       currentVideoIdx: 0,
       skipEnabled: canSkip,
       showAfterVideoIdx: 5,
+      commercialYoutubeId: selectedCommercialYoutubeId,
+      commercialSimilarityLevel: selectedCommercialSimilarityLevel,
     };
 
     // create experiment in backend

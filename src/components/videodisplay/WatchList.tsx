@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import WatchListItem from "./WatchListItem";
-import { Video, WatchListVO } from "@/utils/YouTubeTypes";
+import { Video, WatchListVideosVO } from "@/utils/YouTubeTypes";
 import { useAppSelector } from "@/lib/store";
 import { WatchListReducerState } from "@/lib/features/watchListSlice";
 
 interface WatchListProps {
-  watchList: WatchListVO;
+  watchList: WatchListVideosVO;
   videoId: string;
 }
 

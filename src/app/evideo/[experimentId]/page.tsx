@@ -56,13 +56,15 @@ function Page({ params }: { params: { experimentId: string } }) {
   ) => {
     if (
       !experimentData ||
-      !experimentData.watchListVO.videos[experimentData.currentVideoIdx].id
+      !experimentData.watchListVideosVO.videos[experimentData.currentVideoIdx]
+        .id
     ) {
       return;
     }
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/videoData`;
     const videoId =
-      experimentData.watchListVO.videos[experimentData.currentVideoIdx].id;
+      experimentData.watchListVideosVO.videos[experimentData.currentVideoIdx]
+        .id;
 
     if (videoId) {
       const body: VideoDataDTO = {
@@ -94,7 +96,7 @@ function Page({ params }: { params: { experimentId: string } }) {
         );
       } else if (
         experimentData.currentVideoIdx ===
-        experimentData.watchListVO.videos.length - 1
+        experimentData.watchListVideosVO.videos.length - 1
       ) {
         router.push(`/esurvey/${experimentData.id}`);
       } else {
@@ -116,7 +118,8 @@ function Page({ params }: { params: { experimentId: string } }) {
 
   // if done watching all videos, show thank-you page or redirect to survey
   if (
-    experimentData.currentVideoIdx === experimentData.watchListVO.videos.length
+    experimentData.currentVideoIdx ===
+    experimentData.watchListVideosVO.videos.length
   ) {
     handleDoneWatching();
     return (
@@ -127,9 +130,11 @@ function Page({ params }: { params: { experimentId: string } }) {
   }
 
   const currentYoutubeId =
-    experimentData.watchListVO.videos[experimentData.currentVideoIdx].youtubeId;
+    experimentData.watchListVideosVO.videos[experimentData.currentVideoIdx]
+      .youtubeId;
   const currentVideoTitle =
-    experimentData.watchListVO.videos[experimentData.currentVideoIdx].title;
+    experimentData.watchListVideosVO.videos[experimentData.currentVideoIdx]
+      .title;
 
   return (
     <div className="w-full h-full flex justify-center items-center">

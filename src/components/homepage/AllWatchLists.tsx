@@ -17,7 +17,7 @@ function AllWatchLists() {
   );
 
   return (
-    <div className="bg-[#303030] w-full flex flex-wrap gap-4 overflow-scroll justify-start items-center max-lg:justify-center pl-8 py-8">
+    <div className="bg-[#303030] w-full flex flex-wrap gap-4 overflow-scroll justify-start max-lg:justify-center pl-8 py-8">
       {filteredWatchLists.map((watchList) => {
         return (
           <button

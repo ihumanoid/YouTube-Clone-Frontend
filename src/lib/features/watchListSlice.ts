@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { WatchListVO } from "@/utils/YouTubeTypes";
+import { WatchListVideosVO } from "@/utils/YouTubeTypes";
 
 export interface WatchListReducerState {
-  watchLists: WatchListVO[];
+  watchLists: WatchListVideosVO[];
   keyword: string;
 }
 
@@ -15,7 +15,10 @@ export const watchListSlice = createSlice({
   name: "watchListSlice",
   initialState,
   reducers: {
-    changeAllWatchLists: (state, action: PayloadAction<WatchListVO[]>) => {
+    changeAllWatchLists: (
+      state,
+      action: PayloadAction<WatchListVideosVO[]>
+    ) => {
       return {
         ...state,
         watchLists: action.payload,

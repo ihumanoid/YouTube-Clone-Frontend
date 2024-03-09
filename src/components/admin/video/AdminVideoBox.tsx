@@ -1,6 +1,6 @@
 import { Video } from "@/utils/YouTubeTypes";
 import React from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import { Duration } from "luxon";
 
@@ -16,7 +16,7 @@ function AdminVideoBox({ video, toggleDeleteId }: AdminVideoBoxProps) {
     <div className="w-full bg-black h-48 flex justify-between items-center gap-3 border-white border-b-2 border-soiid">
       <div className="flex h-full items-center pl-4">
         <div className="relative">
-          <Image
+          <img
             src={video.thumbnailUrl}
             alt="thumbnail"
             width={200}
