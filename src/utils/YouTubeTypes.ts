@@ -81,7 +81,7 @@ export interface ExperimentDataVO {
   skipEnabled: boolean;
   showAfterVideoIdx: number;
   currentVideoIdx: number;
-  watchListVideosVO: WatchListVideosVO;
+  watchListCommercialsVideosVO: WatchListCommercialsVideosVO;
   commercialYoutubeId: string;
   commercialSimilarityLevel: string;
 }

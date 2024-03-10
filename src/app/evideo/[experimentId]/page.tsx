@@ -56,15 +56,17 @@ function Page({ params }: { params: { experimentId: string } }) {
   ) => {
     if (
       !experimentData ||
-      !experimentData.watchListVideosVO.videos[experimentData.currentVideoIdx]
-        .id
+      !experimentData.watchListCommercialsVideosVO.videos[
+        experimentData.currentVideoIdx
+      ].id
     ) {
       return;
     }
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/videoData`;
     const videoId =
-      experimentData.watchListVideosVO.videos[experimentData.currentVideoIdx]
-        .id;
+      experimentData.watchListCommercialsVideosVO.videos[
+        experimentData.currentVideoIdx
+      ].id;
 
     if (videoId) {
       const body: VideoDataDTO = {
@@ -94,7 +96,7 @@ function Page({ params }: { params: { experimentId: string } }) {
         router.push(`/ead/${experimentData.id}}`);
       } else if (
         experimentData.currentVideoIdx ===
-        experimentData.watchListVideosVO.videos.length - 1
+        experimentData.watchListCommercialsVideosVO.videos.length - 1
       ) {
         router.push(`/esurvey/${experimentData.id}`);
       } else {
@@ -117,7 +119,7 @@ function Page({ params }: { params: { experimentId: string } }) {
   // if done watching all videos, show thank-you page or redirect to survey
   if (
     experimentData.currentVideoIdx ===
-    experimentData.watchListVideosVO.videos.length
+    experimentData.watchListCommercialsVideosVO.videos.length
   ) {
     handleDoneWatching();
     return (
@@ -128,11 +130,13 @@ function Page({ params }: { params: { experimentId: string } }) {
   }
 
   const currentYoutubeId =
-    experimentData.watchListVideosVO.videos[experimentData.currentVideoIdx]
-      .youtubeId;
+    experimentData.watchListCommercialsVideosVO.videos[
+      experimentData.currentVideoIdx
+    ].youtubeId;
   const currentVideoTitle =
-    experimentData.watchListVideosVO.videos[experimentData.currentVideoIdx]
-      .title;
+    experimentData.watchListCommercialsVideosVO.videos[
+      experimentData.currentVideoIdx
+    ].title;
 
   return (
     <div className="w-full h-full flex justify-center items-center">

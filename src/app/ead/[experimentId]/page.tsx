@@ -71,7 +71,7 @@ function Page({ params }: { params: { experimentId: string } }) {
 
   return (
     <EAdPlayer
-      youtubeId="cYATyMUM0RI"
+      youtubeId={experimentData.commercialYoutubeId}
       skipEnabled={experimentData.skipEnabled}
       experimentId={experimentId}
       updateAdvertisementData={updateAdvertisementData}
