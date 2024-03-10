@@ -56,13 +56,17 @@ function Page({ params }: { params: { experimentId: string } }) {
   ) => {
     if (
       !experimentData ||
-      !experimentData.watchListVO.videos[experimentData.currentVideoIdx].id
+      !experimentData.watchListCommercialsVideosVO.videos[
+        experimentData.currentVideoIdx
+      ].id
     ) {
       return;
     }
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/videoData`;
     const videoId =
-      experimentData.watchListVO.videos[experimentData.currentVideoIdx].id;
+      experimentData.watchListCommercialsVideosVO.videos[
+        experimentData.currentVideoIdx
+      ].id;
 
     if (videoId) {
       const body: VideoDataDTO = {
@@ -89,12 +93,10 @@ function Page({ params }: { params: { experimentId: string } }) {
       }
 
       if (experimentData.currentVideoIdx === experimentData.showAfterVideoIdx) {
-        router.push(
-          `/ead/${experimentData.id}/${experimentData.skipEnabled ? "1" : "0"}`
-        );
+        router.push(`/ead/${experimentData.id}}`);
       } else if (
         experimentData.currentVideoIdx ===
-        experimentData.watchListVO.videos.length - 1
+        experimentData.watchListCommercialsVideosVO.videos.length - 1
       ) {
         router.push(`/esurvey/${experimentData.id}`);
       } else {
@@ -116,7 +118,8 @@ function Page({ params }: { params: { experimentId: string } }) {
 
   // if done watching all videos, show thank-you page or redirect to survey
   if (
-    experimentData.currentVideoIdx === experimentData.watchListVO.videos.length
+    experimentData.currentVideoIdx ===
+    experimentData.watchListCommercialsVideosVO.videos.length
   ) {
     handleDoneWatching();
     return (
@@ -127,9 +130,13 @@ function Page({ params }: { params: { experimentId: string } }) {
   }
 
   const currentYoutubeId =
-    experimentData.watchListVO.videos[experimentData.currentVideoIdx].youtubeId;
+    experimentData.watchListCommercialsVideosVO.videos[
+      experimentData.currentVideoIdx
+    ].youtubeId;
   const currentVideoTitle =
-    experimentData.watchListVO.videos[experimentData.currentVideoIdx].title;
+    experimentData.watchListCommercialsVideosVO.videos[
+      experimentData.currentVideoIdx
+    ].title;
 
   return (
     <div className="w-full h-full flex justify-center items-center">

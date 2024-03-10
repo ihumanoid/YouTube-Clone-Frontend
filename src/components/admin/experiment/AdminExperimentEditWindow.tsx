@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ExperimentData, WatchListVO } from "@/utils/YouTubeTypes";
+import {
+  ExperimentData,
+  SimilarityLevels,
+  WatchListVideosVO,
+} from "@/utils/YouTubeTypes";
 import Image from "next/image";
 
 interface AdminExperimentEditWindowProps {
@@ -14,12 +18,12 @@ function AdminExperimentEditWindow({
   experimentData,
   fetchExperimentData,
 }: AdminExperimentEditWindowProps) {
-  const [watchLists, setWatchLists] = useState<WatchListVO[]>([]);
+  const [watchLists, setWatchLists] = useState<WatchListVideosVO[]>([]);
   const [formData, setFormData] = useState(experimentData);
   const [watchListFilter, setWatchListFilter] = useState("");
-  const [filteredWatchLists, setFilteredWatchLists] = useState<WatchListVO[]>(
-    []
-  );
+  const [filteredWatchLists, setFilteredWatchLists] = useState<
+    WatchListVideosVO[]
+  >([]);
 
   const fetchWatchLists = async () => {
     const response = await fetch(
@@ -42,7 +46,7 @@ function AdminExperimentEditWindow({
     }));
   };
 
-  const handleSelectWatchList = (watchList: WatchListVO) => {
+  const handleSelectWatchList = (watchList: WatchListVideosVO) => {
     setFormData((prev) => ({
       ...prev,
       watchListTitle: watchList.title,
@@ -180,6 +184,26 @@ function AdminExperimentEditWindow({
                 className="h-6 w-6"
               />
             </div>
+            <div className="mb-4 flex items-center gap-2">
+              <label>Commercial Similarity</label>
+              <select
+                id="selectOption"
+                name="selectOption"
+                className="text-black w-22"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setFormData({
+                    ...formData,
+                    commercialSimilarityLevel: e.target.value,
+                  });
+                }}
+                defaultValue={experimentData.commercialSimilarityLevel}
+              >
+                <option value={SimilarityLevels.LOW}>Low</option>
+                <option value={SimilarityLevels.MEDIUM}>Medium</option>
+                <option value={SimilarityLevels.HIGH}>High</option>
+              </select>
+            </div>
           </div>
           <div className="flex flex-col flex-1 h-full mr-4">
             <div className="flex justify-center mb-4">
@@ -231,13 +255,6 @@ function AdminExperimentEditWindow({
                             />
                           ))}
                         </div>
-                        <Image
-                          alt="thumbnail"
-                          src={watchList.commercial.thumbnailUrl}
-                          width={100}
-                          height={80}
-                          className="border border-2 border-red-500"
-                        />
                       </div>
                     </div>
                   );

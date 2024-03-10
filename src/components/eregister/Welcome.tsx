@@ -2,13 +2,13 @@
 import React, { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ExperimentData, ExperimentDataVO } from "@/utils/YouTubeTypes";
-import { WatchListVO } from "@/utils/YouTubeTypes";
+import { WatchListCommercialsVideosVO } from "@/utils/YouTubeTypes";
 
 interface WelcomeProps {
   setPageNum: React.Dispatch<React.SetStateAction<number>>;
   setExperimentId: React.Dispatch<React.SetStateAction<string>>;
   setAssignedWatchList: React.Dispatch<
-    React.SetStateAction<WatchListVO | null>
+    React.SetStateAction<WatchListCommercialsVideosVO | null>
   >;
   email: string;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -44,7 +44,7 @@ function Welcome({
       setPageNum((prev) => prev + 1);
     } else {
       const experimentData: ExperimentDataVO = json.data;
-      setAssignedWatchList(experimentData.watchListVO);
+      setAssignedWatchList(experimentData.watchListCommercialsVideosVO);
       setExperimentId(experimentData.id);
       setPageNum((prev) => prev + 3);
     }

@@ -24,6 +24,8 @@ function AdminExperimentBoard() {
       currentVideoIdx: 0,
       skipEnabled: false,
       showAfterVideoIdx: 0,
+      commercialYoutubeId: "",
+      commercialSimilarityLevel: "",
     });
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = useState("ID");
@@ -58,6 +60,20 @@ function AdminExperimentBoard() {
       }
     );
     setFilteredExperimentDataTable(newFilteredExperimentDataTable);
+  };
+
+  const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newKeyword = e.target.value;
+    if (!newKeyword) {
+      setFilteredExperimentDataTable(experimentDataTable);
+    }
+    setKeyword(newKeyword);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   const fetchExperimentData = async () => {
@@ -107,7 +123,8 @@ function AdminExperimentBoard() {
               placeholder="Filter by"
               className="bg-black px-2 text-sm h-12 w-40"
               value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
+              onChange={handleKeywordChange}
+              onKeyDown={handleKeyDown}
             />
             <button onClick={handleSearch}>
               <svg
@@ -141,25 +158,28 @@ function AdminExperimentBoard() {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="border border-gray-400 px-4 py-2 w-40 max-w-40">
+              <th className="text-sm border border-gray-400 px-4 py-2 w-32 max-w-32">
                 ID
               </th>
-              <th className="border border-gray-400 px-4 py-2 w-40 max-w-40">
+              <th className="text-sm border border-gray-400 px-4 py-2 w-32 max-w-32">
                 Participant ID
               </th>
-              <th className="border border-gray-400 px-4 py-2 w-40 max-w-40">
+              <th className="text-sm border border-gray-400 px-4 py-2 w-40 max-w-40">
                 Watch List
               </th>
-              <th className="border border-gray-400 px-4 py-2 min-w-16 max-w-32">
-                Current Video Index
+              <th className="text-sm border border-gray-400 px-4 py-2 min-w-32 max-w-32">
+                Current Video
               </th>
-              <th className="border border-gray-400 px-4 py-2 min-w-16 max-w-32">
-                Ad Skip Enabled
+              <th className="text-sm border border-gray-400 px-4 py-2 min-w-32 max-w-32">
+                Can Skip
               </th>
-              <th className="border border-gray-400 px-4 py-2 min-w-16 max-w-32">
-                Show Ad After Video Index
+              <th className="text-sm border border-gray-400 px-4 py-2 min-w-32 max-w-32">
+                Show Commercial After
               </th>
-              <th className="border border-gray-400 px-4 py-2 min-w-16 max-w-32">
+              <th className="text-sm border border-gray-400 px-4 py-2 min-w-32 max-w-32">
+                Commercial Similarity
+              </th>
+              <th className="text-sm border border-gray-400 px-4 py-2 min-w-20 max-w-32">
                 Actions
               </th>
             </tr>
@@ -167,45 +187,48 @@ function AdminExperimentBoard() {
           <tbody>
             {filteredExperimentDataTable.map((item) => (
               <tr key={item.id}>
-                <td className="border border-gray-400 px-4 py-2 w-40 max-w-40 truncate">
+                <td className="text-sm border border-gray-400 px-4 py-2 min-w-32 max-w-32 truncate">
                   {item.id}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 w-40 max-w-40 truncate">
+                <td className="text-sm border border-gray-400 px-4 py-2 min-w-32 max-w-32 truncate">
                   {item.participantId}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 w-40 max-w-40 truncate">
+                <td className="text-sm border border-gray-400 px-4 py-2 min-w-40 max-w-40 truncate">
                   <div className="w-full h-full line-clamp-1">
                     {item.watchListTitle}
                   </div>
                 </td>
-                <td className="border border-gray-400 px-4 py-2">
+                <td className="text-sm border border-gray-400 px-4 py-2">
                   {item.currentVideoIdx}
                 </td>
-                <td className="border border-gray-400 px-4 py-2">
+                <td className="text-sm border border-gray-400 px-4 py-2">
                   {item.skipEnabled ? "Yes" : "No"}
                 </td>
-                <td className="border border-gray-400 px-4 py-2">
+                <td className="text-sm border border-gray-400 px-4 py-2">
                   {item.showAfterVideoIdx}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 flex justify-center gap-2">
+                <td className="text-sm border border-gray-400 px-4 py-2">
+                  {item.commercialSimilarityLevel || "TBD"}
+                </td>
+                <td className="text-sm border border-gray-400 px-4 py-2 flex justify-center gap-2">
                   <button
-                    className="bg-black text-white py-1 px-2 w-16"
+                    className="bg-black text-white py-1 px-2 w-16 text-center"
                     onClick={() => handleEdit(item)}
                   >
                     Edit
                   </button>
                   <button
-                    className="bg-red-500 text-white py-1 px-2 w-16"
+                    className="bg-red-500 text-white py-1 px-2 w-16 text-center"
                     onClick={() => handleDelete(item)}
                   >
                     Delete
                   </button>
                   <Link
-                    className="bg-green-500 text-white py-1 px-2 w-28"
+                    className="bg-green-500 text-white py-1 px-2 w-16 text-center"
                     href={`/evideo/${item.id}`}
                     target="_blank"
                   >
-                    Go to Videos
+                    Videos
                   </Link>
                 </td>
               </tr>

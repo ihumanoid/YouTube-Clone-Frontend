@@ -2,8 +2,8 @@
 import Welcome from "@/components/eregister/Welcome";
 import SelectWatchList from "@/components/eregister/SelectWatchList";
 import Instructions from "@/components/eregister/Instructions";
-import React, { ChangeEvent, useState } from "react";
-import { WatchListVO } from "@/utils/YouTubeTypes";
+import React, { useState } from "react";
+import { WatchListCommercialsVideosVO } from "@/utils/YouTubeTypes";
 import CreateSuccess from "@/components/eregister/CreateSuccess";
 
 function Page() {
@@ -11,7 +11,7 @@ function Page() {
   const [email, setEmail] = useState("");
   const [experimentId, setExperimentId] = useState("");
   const [assignedWatchList, setAssignedWatchList] =
-    useState<WatchListVO | null>(null);
+    useState<WatchListCommercialsVideosVO | null>(null);
   const incrementPageNum = () => {
     setPageNum((prev) => prev + 1);
   };

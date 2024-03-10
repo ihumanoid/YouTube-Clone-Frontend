@@ -15,11 +15,7 @@ const EAdPlayer = dynamic(
   }
 );
 
-function Page({
-  params,
-}: {
-  params: { experimentId: string; skipEnabled: string };
-}) {
+function Page({ params }: { params: { experimentId: string } }) {
   const experimentId = params.experimentId;
   const [experimentData, setExperimentData] = useState<ExperimentDataVO | null>(
     null
@@ -49,13 +45,11 @@ function Page({
     );
   }
 
-  const skipEnabled = params.skipEnabled === "1";
-
   const updateAdvertisementData = async (skipped: boolean) => {
     const advertisementData: AdvertisementDataDTO = {
       experimentId: experimentId,
       watchListId: experimentData.watchListId,
-      skipEnabled,
+      skipEnabled: experimentData.skipEnabled,
       skipped,
     };
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/advertisementData`;
@@ -73,10 +67,12 @@ function Page({
     router.push(`/evideo/${experimentData.id}`);
   };
 
+  console.log(experimentData.skipEnabled);
+
   return (
     <EAdPlayer
-      youtubeId="cYATyMUM0RI"
-      skipEnabled={skipEnabled}
+      youtubeId={experimentData.commercialYoutubeId}
+      skipEnabled={experimentData.skipEnabled}
       experimentId={experimentId}
       updateAdvertisementData={updateAdvertisementData}
     />

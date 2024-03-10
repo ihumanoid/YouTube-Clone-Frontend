@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { WatchListVO } from "@/utils/YouTubeTypes";
+import { WatchListVideosVO } from "@/utils/YouTubeTypes";
 import Image from "next/image";
 import { ExperimentData } from "@/utils/YouTubeTypes";
+import { SimilarityLevels } from "@/utils/YouTubeTypes";
 
 interface AdminExperimentAddWindowProps {
   setShowWindow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,7 +14,7 @@ function AdminExperimentAddWindow({
   setShowWindow,
   fetchExperimentData,
 }: AdminExperimentAddWindowProps) {
-  const [watchLists, setWatchLists] = useState<WatchListVO[]>([]);
+  const [watchLists, setWatchLists] = useState<WatchListVideosVO[]>([]);
   const [formData, setFormData] = useState<ExperimentData>({
     id: "",
     participantId: "",
@@ -22,11 +23,13 @@ function AdminExperimentAddWindow({
     currentVideoIdx: 0,
     skipEnabled: false,
     showAfterVideoIdx: 0,
+    commercialYoutubeId: "",
+    commercialSimilarityLevel: "",
   });
   const [watchListFilter, setWatchListFilter] = useState("");
-  const [filteredWatchLists, setFilteredWatchLists] = useState<WatchListVO[]>(
-    []
-  );
+  const [filteredWatchLists, setFilteredWatchLists] = useState<
+    WatchListVideosVO[]
+  >([]);
   const [showError, setShowError] = useState(false);
 
   const fetchWatchLists = async () => {
@@ -50,7 +53,7 @@ function AdminExperimentAddWindow({
     }));
   };
 
-  const handleSelectWatchList = (watchList: WatchListVO) => {
+  const handleSelectWatchList = (watchList: WatchListVideosVO) => {
     setFormData((prev) => ({
       ...prev,
       watchListTitle: watchList.title,
@@ -197,6 +200,25 @@ function AdminExperimentAddWindow({
                 className="h-6 w-6"
               />
             </div>
+            <div className="mb-4 flex items-center gap-2">
+              <label>Commercial Similarity</label>
+              <select
+                id="selectOption"
+                name="selectOption"
+                className="text-black w-22"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setFormData({
+                    ...formData,
+                    commercialSimilarityLevel: e.target.value,
+                  });
+                }}
+              >
+                <option value={SimilarityLevels.LOW}>Low</option>
+                <option value={SimilarityLevels.MEDIUM}>Medium</option>
+                <option value={SimilarityLevels.HIGH}>High</option>
+              </select>
+            </div>
           </div>
           <div className="flex flex-col flex-1 h-full mr-4">
             <div className="flex justify-center mb-4">
@@ -248,13 +270,6 @@ function AdminExperimentAddWindow({
                             />
                           ))}
                         </div>
-                        <Image
-                          alt="thumbnail"
-                          src={watchList.commercial.thumbnailUrl}
-                          width={100}
-                          height={80}
-                          className="border border-2 border-red-500"
-                        />
                       </div>
                     </div>
                   );

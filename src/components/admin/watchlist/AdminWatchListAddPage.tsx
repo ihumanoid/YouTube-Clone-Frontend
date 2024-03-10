@@ -19,9 +19,7 @@ function AdminWatchListAddPage() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [searchedVideos, setSearchedVideos] = useState<Video[]>([]);
   const [basketVideos, setBasketVideos] = useState<Video[]>([]);
-  const [basketCommercial, setBasketCommercial] = useState<Video | null>(null);
   const [nextPageToken, setNextPageToken] = useState<string>("");
-  const [showAfterVideo, setShowAfterVideo] = useState(1);
   const [watchListTitle, setWatchListTitle] = useState("");
   const router = useRouter();
 
@@ -108,15 +106,9 @@ function AdminWatchListAddPage() {
   };
 
   const addWatchList = async () => {
-    if (!basketCommercial) {
-      return;
-    }
-
     const watchList: WatchListDTO = {
       title: watchListTitle,
       length: basketVideos.length,
-      commercial: basketCommercial,
-      showAfterVideoIdx: showAfterVideo - 1,
       videos: basketVideos,
     };
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/watchlist`;
@@ -132,7 +124,6 @@ function AdminWatchListAddPage() {
       throw new Error(`HTTP error! error code: ${response.status}`);
     }
     setBasketVideos([]);
-    setBasketCommercial(null);
     setShowConfirm(false);
     router.push("/nimda/watchlists");
   };
@@ -141,14 +132,6 @@ function AdminWatchListAddPage() {
     setNextPageToken("");
     setSearchedVideos([]);
   }, [selectedSource]);
-
-  const selectCommercial = (video: Video) => {
-    setBasketCommercial(video);
-  };
-
-  const unselectCommercial = () => {
-    setBasketCommercial(null);
-  };
 
   return (
     <div className="bg-[#303030]  w-full h-full flex flex-col p-10">
@@ -239,11 +222,7 @@ function AdminWatchListAddPage() {
             onClick={() => {
               setShowConfirm(true);
             }}
-            disabled={
-              basketVideos.length === 0 ||
-              !basketCommercial ||
-              showAfterVideo === -1
-            }
+            disabled={basketVideos.length === 0}
           >
             Create
           </button>
@@ -260,17 +239,12 @@ function AdminWatchListAddPage() {
           addToBasket={addToBasket}
           loadMore={loadMore}
           showLoadMore={selectedSource === SourceValues.YouTube}
-          selectCommercial={selectCommercial}
         />
 
         <AdminWatchListShoppingBasket
           setBasketVideos={setBasketVideos}
           videos={basketVideos}
-          commercial={basketCommercial}
           removeFromBasket={removeFromBasket}
-          unselectCommercial={unselectCommercial}
-          showAfterVideo={showAfterVideo}
-          setShowAfterVideo={setShowAfterVideo}
         />
       </div>
     </div>

@@ -1,35 +1,20 @@
 "use client";
+import WatchList from "@/components/videodisplay/WatchList";
+import { WatchListCommercialsVO } from "@/utils/YouTubeTypes";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { useAppSelector } from "@/lib/store";
-import {
-  WatchListReducerState,
-  changeAllWatchLists,
-} from "@/lib/features/watchListSlice";
-import AdminWatchListBoardItem from "./AdminWatchListBoardItem";
-import { useDispatch } from "react-redux";
-import { WatchListVideosVO } from "@/utils/YouTubeTypes";
+import AdminCommercialBoardItem from "./AdminCommercialBoardItem";
 
-function AdminWatchListBoard() {
-  const [keyword, setKeyword] = useState("");
-  const [watchLists, setWatchLists] = useState<WatchListVideosVO[]>([]);
+function AdminCommercialBoard() {
+  const [watchLists, setWatchLists] = useState<WatchListCommercialsVO[]>([]);
   const [filteredWatchLists, setFilteredWatchLists] = useState<
-    WatchListVideosVO[]
+    WatchListCommercialsVO[]
   >([]);
-  const fetchWatchLists = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/watchlist/watchlists`
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const watchLists = (await response.json()).data;
-    setWatchLists(watchLists);
-    setFilteredWatchLists(watchLists);
-  };
+  const [keyword, setKeyword] = useState("");
 
   const filterWatchLists = () => {
+    if (!watchLists) {
+      return;
+    }
     const newFilteredWatchLists = watchLists.filter((watchList) =>
       watchList.title.toLowerCase().includes(keyword.toLowerCase())
     );
@@ -37,11 +22,10 @@ function AdminWatchListBoard() {
   };
 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newKeyword = e.target.value;
-    if (!newKeyword) {
+    if (e.target.value.length === 0) {
       setFilteredWatchLists(watchLists);
     }
-    setKeyword(newKeyword);
+    setKeyword(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -51,6 +35,13 @@ function AdminWatchListBoard() {
   };
 
   useEffect(() => {
+    const fetchWatchLists = async () => {
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/watchlist/watchListsWithCommercials`;
+      const response = await fetch(url);
+      const json = await response.json();
+      setWatchLists(json.data);
+      setFilteredWatchLists(json.data);
+    };
     fetchWatchLists();
   }, []);
 
@@ -72,11 +63,6 @@ function AdminWatchListBoard() {
             Search
           </button>
         </div>
-        <Link href="/nimda/watchlists/add">
-          <button className="bg-black px-4 w-20 h-12 rounded-xl font-bold hover:bg-[#202020]">
-            Create
-          </button>
-        </Link>
       </div>
       <div className="bg-black h-full mt-10 overflow-auto flex flex-col gap-y-4 py-4">
         {watchLists.length === 0 ? (
@@ -85,11 +71,7 @@ function AdminWatchListBoard() {
           </div>
         ) : (
           filteredWatchLists.map((watchList, idx) => (
-            <AdminWatchListBoardItem
-              fetchWatchLists={fetchWatchLists}
-              watchList={watchList}
-              key={idx}
-            />
+            <AdminCommercialBoardItem watchList={watchList} key={idx} />
           ))
         )}
       </div>
@@ -97,4 +79,4 @@ function AdminWatchListBoard() {
   );
 }
 
-export default AdminWatchListBoard;
+export default AdminCommercialBoard;

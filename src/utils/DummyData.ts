@@ -1,4 +1,4 @@
-import { Video, WatchListVO } from "./YouTubeTypes";
+import { Video, WatchListVideosVO } from "./YouTubeTypes";
 
 export const AIVideos: Video[] = [
   {
@@ -239,90 +239,35 @@ export const FashionVideos: Video[] = [
   },
 ];
 
-export const WatchLists: WatchListVO[] = [
+export const WatchLists: WatchListVideosVO[] = [
   {
     id: 1,
     title: "AI",
     videos: AIVideos,
     length: AIVideos.length,
-    showAfterVideoIdx: 2,
-    commercial: {
-      youtubeId: "tn9D7O_-j7o",
-      title:
-        "Jay Critch Feat. Rich The Kid &quot;Fashion&quot; (WSHH Exclusive - Official Music Video)",
-      thumbnailUrl: "https://i.ytimg.com/vi/tn9D7O_-j7o/hqdefault.jpg",
-      duration: "PT3M34S",
-      description:
-        'Watch the official music video for "Fashion" by Jay Critch Feat. Rich The Kid. SUBSCRIBE to the Official WorldStarHipHop ...',
-      channelTitle: "WORLDSTARHIPHOP",
-    },
   },
   {
     id: 2,
     title: "Sports",
     videos: SportsVideos,
     length: SportsVideos.length,
-    showAfterVideoIdx: 3,
-    commercial: {
-      youtubeId: "tn9D7O_-j7o",
-      title:
-        "Jay Critch Feat. Rich The Kid &quot;Fashion&quot; (WSHH Exclusive - Official Music Video)",
-      thumbnailUrl: "https://i.ytimg.com/vi/tn9D7O_-j7o/hqdefault.jpg",
-      duration: "PT3M34S",
-      description:
-        'Watch the official music video for "Fashion" by Jay Critch Feat. Rich The Kid. SUBSCRIBE to the Official WorldStarHipHop ...',
-      channelTitle: "WORLDSTARHIPHOP",
-    },
   },
   {
     id: 3,
     title: "Fashion",
     videos: FashionVideos,
     length: FashionVideos.length,
-    showAfterVideoIdx: 4,
-    commercial: {
-      youtubeId: "tn9D7O_-j7o",
-      title:
-        "Jay Critch Feat. Rich The Kid &quot;Fashion&quot; (WSHH Exclusive - Official Music Video)",
-      thumbnailUrl: "https://i.ytimg.com/vi/tn9D7O_-j7o/hqdefault.jpg",
-      duration: "PT3M34S",
-      description:
-        'Watch the official music video for "Fashion" by Jay Critch Feat. Rich The Kid. SUBSCRIBE to the Official WorldStarHipHop ...',
-      channelTitle: "WORLDSTARHIPHOP",
-    },
   },
   {
     id: 4,
     title: "Gaming",
     videos: GamingVideos,
     length: GamingVideos.length,
-    showAfterVideoIdx: 1,
-    commercial: {
-      youtubeId: "tn9D7O_-j7o",
-      title:
-        "Jay Critch Feat. Rich The Kid &quot;Fashion&quot; (WSHH Exclusive - Official Music Video)",
-      thumbnailUrl: "https://i.ytimg.com/vi/tn9D7O_-j7o/hqdefault.jpg",
-      duration: "PT3M34S",
-      description:
-        'Watch the official music video for "Fashion" by Jay Critch Feat. Rich The Kid. SUBSCRIBE to the Official WorldStarHipHop ...',
-      channelTitle: "WORLDSTARHIPHOP",
-    },
   },
   {
     id: 5,
     title: "Food",
     videos: FoodVideos,
     length: FoodVideos.length,
-    showAfterVideoIdx: 2,
-    commercial: {
-      youtubeId: "tn9D7O_-j7o",
-      title:
-        "Jay Critch Feat. Rich The Kid &quot;Fashion&quot; (WSHH Exclusive - Official Music Video)",
-      thumbnailUrl: "https://i.ytimg.com/vi/tn9D7O_-j7o/hqdefault.jpg",
-      duration: "PT3M34S",
-      description:
-        'Watch the official music video for "Fashion" by Jay Critch Feat. Rich The Kid. SUBSCRIBE to the Official WorldStarHipHop ...',
-      channelTitle: "WORLDSTARHIPHOP",
-    },
   },
 ];

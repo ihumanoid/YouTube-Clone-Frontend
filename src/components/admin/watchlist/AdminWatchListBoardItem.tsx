@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { WatchListVO } from "@/utils/YouTubeTypes";
+import { WatchListVideosVO } from "@/utils/YouTubeTypes";
 import Image from "next/image";
 import { Duration } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface AdminWatchListBoardItemProps {
-  watchList: WatchListVO;
+  watchList: WatchListVideosVO;
   fetchWatchLists: () => void;
 }
 
@@ -14,7 +14,6 @@ function AdminWatchListBoardItem({
   watchList,
   fetchWatchLists,
 }: AdminWatchListBoardItemProps) {
-  const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
   const [showError, setShowError] = useState(false);
 
@@ -86,7 +85,7 @@ function AdminWatchListBoardItem({
           <p className="text-gray-400 text-sm">{watchList.length} videos</p>
         </div>
         <div className="flex px-4 gap-4 justify-between">
-          <div className="flex flex-1 overflow-scroll max-lg:max-w-[400px] max-w-[800px] gap-x-4">
+          <div className="flex flex-1 overflow-scroll max-lg:max-w-[500px] max-w-[900px] gap-x-4">
             {watchList.videos.map((video, idx) => {
               return (
                 <Link
@@ -95,7 +94,7 @@ function AdminWatchListBoardItem({
                   className="group relative min-w-32 min-h-24 flex justify-center items-center"
                   key={idx}
                 >
-                  <Image
+                  <img
                     src={video.thumbnailUrl}
                     alt="thumbnail"
                     width={120}
@@ -108,31 +107,15 @@ function AdminWatchListBoardItem({
               );
             })}
           </div>
-          <div className="w-72 flex justify-center items-center gap-4">
+          <div className="w-40 flex justify-center items-center gap-4">
             <Link
-              href={`https://www.youtube.com/watch?v=${watchList.commercial.youtubeId}`}
-              target="_blank"
-              className="group relative min-w-32 min-h-24 flex justify-center items-center"
-            >
-              <Image
-                src={watchList.commercial.thumbnailUrl}
-                alt="thumbnail"
-                width={120}
-                height={100}
-                className="border-red-600 border-4"
-              />
-              <div className="hidden group-hover:block absolute bg-gray-800 text-white p-2 rounded text-[8px] max-h-12 line-clamp-3 cursor-pointer">
-                SELECTED COMMERCIAL - {watchList.commercial.title}
-              </div>
-            </Link>
-            <button
               className="hover:underline"
-              onClick={() =>
-                router.push(`/nimda/watchlists/manage/${watchList.id}`)
-              }
+              href={`/nimda/watchlists/update?watchList=${encodeURIComponent(
+                JSON.stringify(watchList)
+              )}`}
             >
               Manage
-            </button>
+            </Link>
             <button
               className="hover:underline"
               onClick={() => setShowConfirm(true)}

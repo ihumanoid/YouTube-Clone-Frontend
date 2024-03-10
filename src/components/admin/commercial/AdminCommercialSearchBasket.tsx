@@ -1,17 +1,27 @@
-import { Video } from "@/utils/YouTubeTypes";
+import { Commercial, Video } from "@/utils/YouTubeTypes";
 import React from "react";
 import { Duration } from "luxon";
 import Link from "next/link";
 interface AdminWatchListSearchBasketParams {
   videos: Video[];
-  addToBasket: (video: Video) => void;
+  setSelectedLowCommercial: React.Dispatch<
+    React.SetStateAction<Commercial | undefined>
+  >;
+  setSelectedMediumCommercial: React.Dispatch<
+    React.SetStateAction<Commercial | undefined>
+  >;
+  setSelectedHighCommercial: React.Dispatch<
+    React.SetStateAction<Commercial | undefined>
+  >;
   loadMore: () => void;
   showLoadMore: boolean;
 }
 
-function AdminWatchListSearchBasket({
+function AdminCommercialSearchBasket({
   videos,
-  addToBasket,
+  setSelectedLowCommercial,
+  setSelectedMediumCommercial,
+  setSelectedHighCommercial,
   loadMore,
   showLoadMore,
 }: AdminWatchListSearchBasketParams) {
@@ -48,18 +58,33 @@ function AdminWatchListSearchBasket({
             <div className="flex flex-1 h-full flex-col items-start justify-between ml-2">
               <Link
                 href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
-                className="text-sm h-18 line-clamp-2 hover:underline"
+                className="text-sm h-18 line-clamp-1 hover:underline"
                 target="_blank"
               >
                 {video.title}
               </Link>
-              <div className="flex gap-4">
-                <button
-                  onClick={() => addToBasket(video)}
-                  className="hover:underline text-blue-500 text-xs"
-                >
-                  ADD TO VIDEOS
-                </button>
+              <div className="flex flex-col">
+                <div className="text-sm">Select As</div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setSelectedLowCommercial(video)}
+                    className="hover:underline text-red-500 text-xs"
+                  >
+                    Low Similarity
+                  </button>
+                  <button
+                    onClick={() => setSelectedMediumCommercial(video)}
+                    className="hover:underline text-green-500 text-xs"
+                  >
+                    Medium Similarity
+                  </button>
+                  <button
+                    onClick={() => setSelectedHighCommercial(video)}
+                    className="hover:underline text-blue-500 text-xs"
+                  >
+                    High Similarity
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -77,4 +102,4 @@ function AdminWatchListSearchBasket({
   );
 }
 
-export default AdminWatchListSearchBasket;
+export default AdminCommercialSearchBasket;
