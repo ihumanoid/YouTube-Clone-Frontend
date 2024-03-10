@@ -91,9 +91,7 @@ function Page({ params }: { params: { experimentId: string } }) {
       }
 
       if (experimentData.currentVideoIdx === experimentData.showAfterVideoIdx) {
-        router.push(
-          `/ead/${experimentData.id}/${experimentData.skipEnabled ? "1" : "0"}`
-        );
+        router.push(`/ead/${experimentData.id}}`);
       } else if (
         experimentData.currentVideoIdx ===
         experimentData.watchListVideosVO.videos.length - 1

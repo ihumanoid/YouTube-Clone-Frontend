@@ -129,6 +129,13 @@ export interface VideoTopic {
   topic: string;
 }
 
+export interface RandomParamsVO {
+  giveDesiredWatchList: number;
+  watchListIndex: number;
+  skipEnabled: number;
+  similarityLevel: number;
+}
+
 export enum SimilarityLevels {
   LOW = "LOW",
   MEDIUM = "MEDIUM",

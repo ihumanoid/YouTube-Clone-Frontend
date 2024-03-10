@@ -1,6 +1,7 @@
 "use client";
 import {
   ExperimentData,
+  RandomParamsVO,
   WatchListCommercialsVideosVO,
 } from "@/utils/YouTubeTypes";
 import React, { useEffect, useState } from "react";
@@ -34,7 +35,7 @@ function SelectWatchList({
 
   useEffect(() => {
     const fetchWatchLists = async () => {
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/watchlist/watchlists`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/watchlist/watchListsWithCommercialsVideos`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! Error code: ${response.status}`);
@@ -47,50 +48,39 @@ function SelectWatchList({
   }, []);
 
   const createExperimentAndRedirect = async () => {
-    // randomize watch list
-    let randomNum = Math.floor(Math.random() * 10);
-    let selectedWatchList = watchLists[selectedWatchListIdx];
+    // get random params
+    const randomParamsUrl = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/randomParams`;
+    const randomParamsResponse = await fetch(randomParamsUrl);
+    const randomParams: RandomParamsVO = (await randomParamsResponse.json())
+      .data;
 
-    if (randomNum >= 5) {
-      const filteredWatchLists = watchLists
-        .slice(0, selectedWatchListIdx)
-        .concat(watchLists.slice(selectedWatchListIdx + 1));
-      const newSelectedWatchListIdx = Math.floor(
-        Math.random() * filteredWatchLists.length
-      );
-      selectedWatchList = filteredWatchLists[newSelectedWatchListIdx];
+    // process random params
+    let assignedWatchList = watchLists[selectedWatchListIdx];
+    let assignedCommercialYoutubeId = "";
+    let assignedCommercialSimilarityLevel = "";
+    if (randomParams.giveDesiredWatchList === 0) {
+      if (randomParams.watchListIndex >= selectedWatchListIdx) {
+        randomParams.watchListIndex++;
+      }
+      assignedWatchList = watchLists[randomParams.watchListIndex];
     }
+    const canSkip = randomParams.skipEnabled === 1;
 
-    // randomize skip permission
-    randomNum = Math.floor(Math.random() * 10);
-    const canSkip = randomNum >= 5;
-
-    // randomize advertisement
-    if (
-      !selectedWatchList.lowCommercial ||
-      !selectedWatchList.mediumCommercial ||
-      !selectedWatchList.highCommercial
-    ) {
-      throw new Error("Server error: commercial youtube id cannot be null");
-    }
-    randomNum = Math.floor(Math.random() * 3);
-    let selectedCommercialYoutubeId = "";
-    let selectedCommercialSimilarityLevel = "";
-    switch (randomNum) {
+    switch (randomParams.similarityLevel) {
       case 0:
-        selectedCommercialYoutubeId = selectedWatchList.lowCommercial.youtubeId;
-        selectedCommercialSimilarityLevel = CommercialSimilarityLevels.LOW;
+        assignedCommercialYoutubeId = assignedWatchList.lowCommercial.youtubeId;
+        assignedCommercialSimilarityLevel = CommercialSimilarityLevels.LOW;
+        break;
       case 1:
-        selectedCommercialYoutubeId =
-          selectedWatchList.mediumCommercial.youtubeId;
-        selectedCommercialSimilarityLevel = CommercialSimilarityLevels.MEDIUM;
-      case 2:
-        selectedCommercialYoutubeId =
-          selectedWatchList.highCommercial.youtubeId;
-        selectedCommercialSimilarityLevel = CommercialSimilarityLevels.HIGH;
+        assignedCommercialYoutubeId =
+          assignedWatchList.mediumCommercial.youtubeId;
+        assignedCommercialSimilarityLevel = CommercialSimilarityLevels.MEDIUM;
+        break;
+      default:
+        assignedCommercialYoutubeId =
+          assignedWatchList.highCommercial.youtubeId;
+        assignedCommercialSimilarityLevel = CommercialSimilarityLevels.HIGH;
     }
-
-    // To Do: randomize ad index
 
     // create experiment data object
     const experimentId = email.split("@")[0] + new Date().getTime();
@@ -98,13 +88,13 @@ function SelectWatchList({
     const experimentData: ExperimentData = {
       id: experimentId,
       participantId: email,
-      watchListId: selectedWatchList.id,
-      watchListTitle: selectedWatchList.title,
+      watchListId: assignedWatchList.id,
+      watchListTitle: assignedWatchList.title,
       currentVideoIdx: 0,
       skipEnabled: canSkip,
       showAfterVideoIdx: 5,
-      commercialYoutubeId: selectedCommercialYoutubeId,
-      commercialSimilarityLevel: selectedCommercialSimilarityLevel,
+      commercialYoutubeId: assignedCommercialYoutubeId,
+      commercialSimilarityLevel: assignedCommercialSimilarityLevel,
     };
 
     // create experiment in backend
@@ -122,7 +112,7 @@ function SelectWatchList({
       throw new Error(`HTTP Error! Error code: ${response.status}`);
     }
 
-    setAssignedWatchList(selectedWatchList);
+    setAssignedWatchList(assignedWatchList);
     incrementPageNum();
   };
 
@@ -158,7 +148,7 @@ function SelectWatchList({
                           className="group relative min-w-32 min-h-24 flex justify-center items-center"
                           key={idx}
                         >
-                          <Image
+                          <img
                             src={video.thumbnailUrl}
                             alt="thumbnail"
                             width={120}
