@@ -120,8 +120,8 @@ function SelectWatchList({
     <div className="w-full h-full flex justify-center items-center">
       <div className="bg-gray-700 px-10 py-4 rounded-lg">
         <div className="text-2xl text-center mb-4">
-          Among the following watch lists, which one seems the most interesting
-          to you
+          Among the following topics, which one seems the most interesting to
+          you
         </div>
         <div className="max-h-[450px] overflow-auto">
           {watchLists.map((watchList, idx) => {
@@ -134,14 +134,22 @@ function SelectWatchList({
                     : "border-2 border-[#151515]"
                 }`}
               >
-                <div className="ml-4 flex items-center gap-2">
-                  <p className="text-xl">{watchList.title}</p>
-                  <p className="text-gray-400 text-sm">
-                    {watchList.length} videos
-                  </p>
+                <div className="ml-4 flex items-center gap-2 justify-between px-8">
+                  <div>
+                    <p className="text-2xl">{watchList.title}</p>
+                    <p className="text-gray-400 text-sm">
+                      {watchList.length} videos
+                    </p>
+                  </div>
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                    onClick={() => setSelectedWatchListIdx(idx)}
+                  >
+                    Select
+                  </button>
                 </div>
                 <div className="flex px-4 gap-4 justify-between items-center">
-                  <div className="flex flex-1 overflow-scroll max-lg:max-w-[400px] max-w-[600px] gap-x-4">
+                  {/* <div className="flex flex-1 overflow-scroll max-lg:max-w-[400px] max-w-[600px] gap-x-4">
                     {watchList.videos.map((video, idx) => {
                       return (
                         <div
@@ -160,13 +168,13 @@ function SelectWatchList({
                         </div>
                       );
                     })}
-                  </div>
-                  <button
+                  </div> */}
+                  {/* <button
                     className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
                     onClick={() => setSelectedWatchListIdx(idx)}
                   >
                     Select
-                  </button>
+                  </button> */}
                 </div>
               </div>
             );
