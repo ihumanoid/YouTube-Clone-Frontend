@@ -43,21 +43,29 @@ export interface WatchListCommercialsVideosVO {
   videos: Video[];
 }
 
+export interface CommercialSimilarityVO {
+  watchListId: string;
+  commercialYoutubeId: string;
+  similarityScore: number;
+  title: string;
+  thumbnailUrl: string;
+  duration: string;
+  description: string;
+  channelTitle: string;
+}
+export interface WatchListCommercialSimilarityVO {
+  id: number;
+  title: string;
+  length: number;
+  lowSimilarity: CommercialSimilarityVO[];
+  highSimilarity: CommercialSimilarityVO[];
+}
+
 export interface WatchListDTO {
   title: string;
   length: number;
   videos: Video[];
 }
-
-// export interface WatchListCommercialVO {
-//   id: number;
-//   title: string;
-//   length: number;
-//   videos: Video[];
-//   lowYoutubeId?: string;
-//   mediumYoutubeId?: string;
-//   highYoutubeId?: string;
-// }
 
 export interface SearchResultListVO {
   nextPageToken: string;

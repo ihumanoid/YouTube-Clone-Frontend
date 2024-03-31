@@ -8,6 +8,7 @@ function AdminVideoBoard() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [deleteIds, setDeleteIds] = useState<number[]>([]);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [filteredVideos, setFilteredVideos] = useState<Video[]>([]);
 
   const getVideos = async () => {
@@ -32,8 +33,12 @@ function AdminVideoBoard() {
       },
       body: deleteIds.join(","),
     });
-    if (response.ok) {
+    if (response.status === 409) {
+      setShowError(true);
+    } else if (response.ok) {
+      setShowError(false);
       setShowConfirm(false);
+      setDeleteIds([]);
       getVideos();
     }
   };
@@ -93,6 +98,13 @@ function AdminVideoBoard() {
                 Confirm
               </button>
             </div>
+            {showError && (
+              <div className="flex justify-center px-4 py-2">
+                <div className="text-red-600 text-center">
+                  Delete Failed: Some watch list uses these videos
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

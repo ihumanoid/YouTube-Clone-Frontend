@@ -3,29 +3,17 @@ import React from "react";
 import { Duration } from "luxon";
 import Link from "next/link";
 interface AdminWatchListSearchBasketParams {
-  videos: Video[];
-  setSelectedLowCommercial: React.Dispatch<
-    React.SetStateAction<Commercial | undefined>
-  >;
-  setSelectedMediumCommercial: React.Dispatch<
-    React.SetStateAction<Commercial | undefined>
-  >;
-  setSelectedHighCommercial: React.Dispatch<
-    React.SetStateAction<Commercial | undefined>
-  >;
+  commercials: Commercial[];
+  addToBasket: (commercial: Video) => void;
   loadMore: () => void;
-  showLoadMore: boolean;
 }
 
 function AdminCommercialSearchBasket({
-  videos,
-  setSelectedLowCommercial,
-  setSelectedMediumCommercial,
-  setSelectedHighCommercial,
+  commercials,
+  addToBasket,
   loadMore,
-  showLoadMore,
 }: AdminWatchListSearchBasketParams) {
-  if (videos.length === 0) {
+  if (commercials.length === 0) {
     return (
       <div className="bg-black h-full w-full flex justify-center items-center font-bold text-2xl">
         Search Result
@@ -35,17 +23,17 @@ function AdminCommercialSearchBasket({
 
   return (
     <div className="bg-black h-full w-full flex flex-col overflow-auto gap-2">
-      {videos.map((video, idx) => {
-        const minutes = Duration.fromISO(video.duration).minutes;
-        const seconds = Duration.fromISO(video.duration).seconds;
+      {commercials.map((commercial, idx) => {
+        const minutes = Duration.fromISO(commercial.duration).minutes;
+        const seconds = Duration.fromISO(commercial.duration).seconds;
         return (
           <div
-            key={(video.youtubeId, idx)}
+            key={(commercial.youtubeId, idx)}
             className="w-full h-20 max-h-20 flex border-b-white border-b-solid border-b-2"
           >
             <div className="relative flex w-30 justify-center bg">
               <img
-                src={video.thumbnailUrl}
+                src={commercial.thumbnailUrl}
                 alt="Video Thumbnail"
                 width={100}
                 height={30}
@@ -57,47 +45,30 @@ function AdminCommercialSearchBasket({
 
             <div className="flex flex-1 h-full flex-col items-start justify-between ml-2">
               <Link
-                href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
+                href={`https://www.youtube.com/watch?v=${commercial.youtubeId}`}
                 className="text-sm h-18 line-clamp-1 hover:underline"
                 target="_blank"
               >
-                {video.title}
+                {commercial.title}
               </Link>
-              <div className="flex flex-col">
-                <div className="text-sm">Select As</div>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setSelectedLowCommercial(video)}
-                    className="hover:underline text-red-500 text-xs"
-                  >
-                    Low Similarity
-                  </button>
-                  <button
-                    onClick={() => setSelectedMediumCommercial(video)}
-                    className="hover:underline text-green-500 text-xs"
-                  >
-                    Medium Similarity
-                  </button>
-                  <button
-                    onClick={() => setSelectedHighCommercial(video)}
-                    className="hover:underline text-blue-500 text-xs"
-                  >
-                    High Similarity
-                  </button>
-                </div>
-              </div>
+              <button
+                className="text-blue-500 hover:underline"
+                onClick={() => {
+                  addToBasket(commercial);
+                }}
+              >
+                ADD TO BASKET
+              </button>
             </div>
           </div>
         );
       })}
-      {showLoadMore && (
-        <button
-          onClick={loadMore}
-          className="text-center text-xl font-bold hover:bg-slate-800 py-4 cursor-pointer"
-        >
-          Load More
-        </button>
-      )}
+      <button
+        onClick={loadMore}
+        className="text-center text-xl font-bold hover:bg-slate-800 py-4 cursor-pointer"
+      >
+        Load More
+      </button>
     </div>
   );
 }

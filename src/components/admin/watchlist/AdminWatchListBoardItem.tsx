@@ -72,7 +72,7 @@ function AdminWatchListBoardItem({
             {showError && (
               <div className="flex justify-center px-4 py-2">
                 <div className="text-red-600 text-center">
-                  Delete Failed: Some Experiment Entries Use This Watch List
+                  Delete Failed: Some experiment entries use this watch list
                 </div>
               </div>
             )}
