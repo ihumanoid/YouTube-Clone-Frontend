@@ -2,7 +2,7 @@ import {
   Commercial,
   Video,
   VideoTopic,
-  WatchListCommercialsVO,
+  WatchListCommercialsVODep,
 } from "@/utils/YouTubeTypes";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -24,7 +24,7 @@ function AdminCommercialUpdatePage() {
   if (!watchListString) {
     throw new Error("Url is missing the parameter 'watchList'");
   }
-  const watchList: WatchListCommercialsVO = JSON.parse(watchListString);
+  const watchList: WatchListCommercialsVODep = JSON.parse(watchListString);
 
   // search parameter states
   const [keyword, setKeyword] = useState("");
@@ -111,7 +111,7 @@ function AdminCommercialUpdatePage() {
 
   const handleSubmit = async () => {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/admin/commercial`;
-    const updatedWatchList: WatchListCommercialsVO = {
+    const updatedWatchList: WatchListCommercialsVODep = {
       ...watchList,
       lowCommercial: selectedLowCommercial,
       mediumCommercial: selectedMediumCommercial,

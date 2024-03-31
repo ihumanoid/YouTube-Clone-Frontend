@@ -10,11 +10,14 @@ function AdminSidebar() {
       <Link href="/nimda/videos" className="hover:underline">
         Videos
       </Link>
+      <Link href="/nimda/commercials" className="hover:underline">
+        Commercials
+      </Link>
       <Link href="/nimda/watchlists" className="hover:underline">
         Watch Lists
       </Link>
-      <Link href="/nimda/commercials" className="hover:underline">
-        Commercials
+      <Link href="/nimda/similarity" className="hover:underline">
+        Similarity Scores
       </Link>
       <Link href="/nimda/experiments" className="hover:underline">
         Experiments

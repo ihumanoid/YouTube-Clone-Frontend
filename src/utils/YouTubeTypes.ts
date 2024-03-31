@@ -24,7 +24,7 @@ export interface WatchListVideosVO {
   videos: Video[];
 }
 
-export interface WatchListCommercialsVO {
+export interface WatchListCommercialsVODep {
   id: number;
   title: string;
   length: number;
@@ -33,14 +33,31 @@ export interface WatchListCommercialsVO {
   highCommercial?: Commercial;
 }
 
+export interface CommercialSimilarityVO {
+  watchListId: string;
+  commercialYoutubeId: string;
+  similarityScore: number;
+  title: string;
+  thumbnailUrl: string;
+  duration: string;
+  description: string;
+  channelTitle: string;
+}
+
 export interface WatchListCommercialsVideosVO {
   id: number;
   title: string;
   length: number;
-  lowCommercial: Commercial;
-  mediumCommercial: Commercial;
-  highCommercial: Commercial;
   videos: Video[];
+  lowSimilarity: CommercialSimilarityVO[];
+  highSimilarity: CommercialSimilarityVO[];
+}
+export interface WatchListCommercialSimilarityVO {
+  id: number;
+  title: string;
+  length: number;
+  lowSimilarity: CommercialSimilarityVO[];
+  highSimilarity: CommercialSimilarityVO[];
 }
 
 export interface WatchListDTO {
@@ -48,16 +65,6 @@ export interface WatchListDTO {
   length: number;
   videos: Video[];
 }
-
-// export interface WatchListCommercialVO {
-//   id: number;
-//   title: string;
-//   length: number;
-//   videos: Video[];
-//   lowYoutubeId?: string;
-//   mediumYoutubeId?: string;
-//   highYoutubeId?: string;
-// }
 
 export interface SearchResultListVO {
   nextPageToken: string;
@@ -122,6 +129,9 @@ export interface SurveyDataDTO {
   advertisementRating: number;
   advertisementBrand: string;
   advertisementProduct: string;
+  knewBrand: boolean;
+  knewProduct: boolean;
+  seenAdvertisement: boolean;
 }
 
 export interface VideoTopic {
@@ -134,8 +144,9 @@ export interface RandomParamsVO {
   watchListIndex: number;
   skipEnabled: number;
   similarityLevel: number;
+  similarityIndex: number;
+  showAdAfterIndex: number;
 }
-
 export enum SimilarityLevels {
   LOW = "LOW",
   MEDIUM = "MEDIUM",

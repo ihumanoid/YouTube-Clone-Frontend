@@ -19,7 +19,6 @@ interface SelectWatchListProps {
 enum CommercialSimilarityLevels {
   LOW = "LOW",
   HIGH = "HIGH",
-  MEDIUM = "MEDIUM",
 }
 
 function SelectWatchList({
@@ -57,7 +56,9 @@ function SelectWatchList({
     // process random params
     let assignedWatchList = watchLists[selectedWatchListIdx];
     let assignedCommercialYoutubeId = "";
-    let assignedCommercialSimilarityLevel = "";
+    let assignedSimilarityLevel = "";
+    const assignedSimilarityIndex = randomParams.similarityIndex;
+    const assignedShowAdAfterVideoIdx = randomParams.showAdAfterIndex;
     if (randomParams.giveDesiredWatchList === 0) {
       if (randomParams.watchListIndex >= selectedWatchListIdx) {
         randomParams.watchListIndex++;
@@ -68,18 +69,16 @@ function SelectWatchList({
 
     switch (randomParams.similarityLevel) {
       case 0:
-        assignedCommercialYoutubeId = assignedWatchList.lowCommercial.youtubeId;
-        assignedCommercialSimilarityLevel = CommercialSimilarityLevels.LOW;
-        break;
-      case 1:
         assignedCommercialYoutubeId =
-          assignedWatchList.mediumCommercial.youtubeId;
-        assignedCommercialSimilarityLevel = CommercialSimilarityLevels.MEDIUM;
+          assignedWatchList.lowSimilarity[assignedSimilarityIndex]
+            .commercialYoutubeId;
+        assignedSimilarityLevel = CommercialSimilarityLevels.LOW;
         break;
       default:
         assignedCommercialYoutubeId =
-          assignedWatchList.highCommercial.youtubeId;
-        assignedCommercialSimilarityLevel = CommercialSimilarityLevels.HIGH;
+          assignedWatchList.highSimilarity[assignedSimilarityIndex]
+            .commercialYoutubeId;
+        assignedSimilarityLevel = CommercialSimilarityLevels.HIGH;
     }
 
     // create experiment data object
@@ -92,9 +91,9 @@ function SelectWatchList({
       watchListTitle: assignedWatchList.title,
       currentVideoIdx: 0,
       skipEnabled: canSkip,
-      showAfterVideoIdx: 5,
+      showAfterVideoIdx: assignedShowAdAfterVideoIdx,
       commercialYoutubeId: assignedCommercialYoutubeId,
-      commercialSimilarityLevel: assignedCommercialSimilarityLevel,
+      commercialSimilarityLevel: assignedSimilarityLevel,
     };
 
     // create experiment in backend

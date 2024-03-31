@@ -11,7 +11,7 @@ function Sidebar() {
   );
   const watchLists = watchListState.watchLists;
   return (
-    <div className="bg-black w-44 overflow-auto pb-4">
+    <div className="bg-black w-52 overflow-auto pb-4">
       <Link
         href="/"
         className="w-full mt-4 mb-8 text-center flex justify-center text-xl hover:font-bold"

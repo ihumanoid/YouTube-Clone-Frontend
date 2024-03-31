@@ -8,16 +8,20 @@ interface ESurveyProps {
 
 const ESurvey = ({ experimentId }: ESurveyProps) => {
   const [responses, setResponses] = useState({
-    rating: "",
+    rating: 0,
     product: "",
     brand: "",
+    knewBrand: false,
+    knewProduct: false,
+    seenAdvertisement: false,
   });
   const [success, setSuccess] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setResponses({ ...responses, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setResponses({ ...responses, [name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -27,7 +31,10 @@ const ESurvey = ({ experimentId }: ESurveyProps) => {
       experimentId,
       advertisementBrand: responses.brand,
       advertisementProduct: responses.product,
-      advertisementRating: parseInt(responses.rating),
+      advertisementRating: responses.rating,
+      knewBrand: responses.knewBrand,
+      knewProduct: responses.knewProduct,
+      seenAdvertisement: responses.seenAdvertisement,
     };
     const response = await fetch(url, {
       method: "POST",
@@ -58,7 +65,8 @@ const ESurvey = ({ experimentId }: ESurveyProps) => {
         <div className="mb-6">
           <label htmlFor="rating" className="block text-lg font-medium mb-2">
             An advertisement was inserted into the list of videos you just
-            watched. On a scale of 1 to 5, please rate the advertisement
+            watched. On a scale of 1 to 5, please rate the likability and
+            effectiveness of the advertisement.
           </label>
           {[...Array(5)].map((_, index) => (
             <label key={index} className="inline-flex items-center mr-4">
@@ -69,11 +77,13 @@ const ESurvey = ({ experimentId }: ESurveyProps) => {
                 value={index + 1}
                 className="hidden"
                 required
-                onChange={handleChange}
+                onChange={() =>
+                  setResponses({ ...responses, rating: index + 1 })
+                }
               />
               <div
                 className={`rounded-full w-10 h-10 flex justify-center items-center cursor-pointer ${
-                  responses.rating === `${index + 1}`
+                  responses.rating === index + 1
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-black hover:bg-gray-400"
                 }`}
@@ -112,6 +122,115 @@ const ESurvey = ({ experimentId }: ESurveyProps) => {
             required
             onChange={handleChange}
           />
+        </div>
+
+        {/* Question 4-6: Seen product & brand & advertisement */}
+        <div className="mb-6">
+          <label htmlFor="knewBrand" className="block text-lg font-medium mb-2">
+            Did you know the brand before watching the advertisement?
+          </label>
+          <button
+            type="button"
+            className={`text-xl border-2 border-gray-600 rounded-xl py-2 px-4 ${
+              !responses.knewBrand
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }`}
+            onClick={() => {
+              setResponses({ ...responses, knewBrand: !responses.knewBrand });
+            }}
+          >
+            No
+          </button>
+          <button
+            type="button"
+            className={`ml-4 text-xl border-2 border-gray-600 rounded-xl py-2 px-4 ${
+              responses.knewBrand
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }`}
+            onClick={() => {
+              setResponses({ ...responses, knewBrand: !responses.knewBrand });
+            }}
+          >
+            Yes
+          </button>
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="knewBrand" className="block text-lg font-medium mb-2">
+            Did you know the product before watching the advertisement?
+          </label>
+          <button
+            type="button"
+            className={`text-xl border-2 border-gray-600 rounded-xl py-2 px-4 ${
+              !responses.knewProduct
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }`}
+            onClick={() => {
+              setResponses({
+                ...responses,
+                knewProduct: !responses.knewProduct,
+              });
+            }}
+          >
+            No
+          </button>
+          <button
+            type="button"
+            className={`ml-4 text-xl border-2 border-gray-600 rounded-xl py-2 px-4 ${
+              responses.knewProduct
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }`}
+            onClick={() => {
+              setResponses({
+                ...responses,
+                knewProduct: !responses.knewProduct,
+              });
+            }}
+          >
+            Yes
+          </button>
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="knewBrand" className="block text-lg font-medium mb-2">
+            Have you seen the advertisement before?
+          </label>
+          <button
+            type="button"
+            className={`text-xl border-2 border-gray-600 rounded-xl py-2 px-4 ${
+              !responses.seenAdvertisement
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }`}
+            onClick={() => {
+              setResponses({
+                ...responses,
+                seenAdvertisement: !responses.seenAdvertisement,
+              });
+            }}
+          >
+            No
+          </button>
+          <button
+            type="button"
+            className={`ml-4 text-xl border-2 border-gray-600 rounded-xl py-2 px-4 ${
+              responses.seenAdvertisement
+                ? "bg-blue-500 text-white"
+                : "bg-white text-black"
+            }`}
+            onClick={() => {
+              setResponses({
+                ...responses,
+                seenAdvertisement: !responses.seenAdvertisement,
+              });
+            }}
+          >
+            Yes
+          </button>
         </div>
 
         {/* Submit button */}
