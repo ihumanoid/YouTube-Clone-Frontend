@@ -38,6 +38,9 @@ function AdminSimilarityBoardSubitem({
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-600 hidden group-hover:block max-h-20 line-clamp-3">
                       {commercialSimilarityVO.title}
                     </div>
+                    <div className="absolute top-0 left-0 border-2 rounded-full border-black w-7 h-7 bg-gray-700 text-center">
+                      {idx + 1}
+                    </div>
                   </Link>
                 ) : (
                   <div className="w-[150px] h-[112px] bg-slate-900 flex justify-center items-center text-3xl font-bold">

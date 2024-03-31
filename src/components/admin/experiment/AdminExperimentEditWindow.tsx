@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import {
   ExperimentData,
   SimilarityLevels,
+  WatchListCommercialSimilarityVO,
+  WatchListCommercialsVideosVO,
   WatchListVideosVO,
 } from "@/utils/YouTubeTypes";
 import Image from "next/image";
@@ -18,16 +20,18 @@ function AdminExperimentEditWindow({
   experimentData,
   fetchExperimentData,
 }: AdminExperimentEditWindowProps) {
-  const [watchLists, setWatchLists] = useState<WatchListVideosVO[]>([]);
+  const [watchLists, setWatchLists] = useState<WatchListCommercialsVideosVO[]>(
+    []
+  );
   const [formData, setFormData] = useState(experimentData);
   const [watchListFilter, setWatchListFilter] = useState("");
   const [filteredWatchLists, setFilteredWatchLists] = useState<
-    WatchListVideosVO[]
+    WatchListCommercialsVideosVO[]
   >([]);
 
   const fetchWatchLists = async () => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/watchlist/watchlists`
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/watchlist/watchListsWithCommercialsVideos`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -67,6 +71,16 @@ function AdminExperimentEditWindow({
   };
 
   const handleSubmit = async () => {
+    // set commercial youtube id
+    const watchListIdx = watchLists.findIndex(
+      (watchList) => formData.watchListId === watchList.id
+    );
+    const watchList = watchLists[watchListIdx];
+    formData.commercialYoutubeId =
+      formData.commercialSimilarityLevel === "LOW"
+        ? watchList.lowSimilarity[0].commercialYoutubeId
+        : watchList.highSimilarity[0].commercialYoutubeId;
+
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment`;
     const response = await fetch(url, {
       method: "PUT",
@@ -200,7 +214,6 @@ function AdminExperimentEditWindow({
                 defaultValue={experimentData.commercialSimilarityLevel}
               >
                 <option value={SimilarityLevels.LOW}>Low</option>
-                <option value={SimilarityLevels.MEDIUM}>Medium</option>
                 <option value={SimilarityLevels.HIGH}>High</option>
               </select>
             </div>

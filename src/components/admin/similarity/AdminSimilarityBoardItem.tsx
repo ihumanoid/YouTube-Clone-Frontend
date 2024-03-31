@@ -1,7 +1,4 @@
-import {
-  WatchListCommercialSimilarityVO,
-  WatchListCommercialsVO,
-} from "@/utils/YouTubeTypes";
+import { WatchListCommercialSimilarityVO } from "@/utils/YouTubeTypes";
 import React from "react";
 import AdminSimilarityBoardSubitem from "./AdminSimilarityBoardSubitem";
 import Link from "next/link";
@@ -26,9 +23,12 @@ function AdminSimilarityBoardItem({
     <div className="bg-[#151515] mx-2 py-2 rounded-sm flex items-center">
       <div className="flex flex-col">
         <div className="ml-4 flex flex-col flex-center justify-center items-center gap-4">
-          <p className="text-xl w-48 line-clamp-1 text-center">
+          <Link
+            className="text-xl w-48 line-clamp-1 text-center hover:underline"
+            href={`/${watchList.id}`}
+          >
             {watchList.title}
-          </p>
+          </Link>
           <div className="text-sm text-gray-300">{watchList.length} videos</div>
         </div>
       </div>

@@ -1,9 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { WatchListVideosVO } from "@/utils/YouTubeTypes";
+import {
+  WatchListCommercialSimilarityVO,
+  WatchListCommercialsVideosVO,
+  WatchListVideosVO,
+} from "@/utils/YouTubeTypes";
 import Image from "next/image";
 import { ExperimentData } from "@/utils/YouTubeTypes";
 import { SimilarityLevels } from "@/utils/YouTubeTypes";
+import { watch } from "fs";
 
 interface AdminExperimentAddWindowProps {
   setShowWindow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,7 +19,9 @@ function AdminExperimentAddWindow({
   setShowWindow,
   fetchExperimentData,
 }: AdminExperimentAddWindowProps) {
-  const [watchLists, setWatchLists] = useState<WatchListVideosVO[]>([]);
+  const [watchLists, setWatchLists] = useState<WatchListCommercialsVideosVO[]>(
+    []
+  );
   const [formData, setFormData] = useState<ExperimentData>({
     id: "",
     participantId: "",
@@ -24,17 +31,17 @@ function AdminExperimentAddWindow({
     skipEnabled: false,
     showAfterVideoIdx: 0,
     commercialYoutubeId: "",
-    commercialSimilarityLevel: "",
+    commercialSimilarityLevel: SimilarityLevels.LOW,
   });
   const [watchListFilter, setWatchListFilter] = useState("");
   const [filteredWatchLists, setFilteredWatchLists] = useState<
-    WatchListVideosVO[]
+    WatchListCommercialsVideosVO[]
   >([]);
   const [showError, setShowError] = useState(false);
 
   const fetchWatchLists = async () => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/watchlist/watchlists`
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/watchlist/watchListsWithCommercialsVideos`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -53,7 +60,7 @@ function AdminExperimentAddWindow({
     }));
   };
 
-  const handleSelectWatchList = (watchList: WatchListVideosVO) => {
+  const handleSelectWatchList = (watchList: WatchListCommercialsVideosVO) => {
     setFormData((prev) => ({
       ...prev,
       watchListTitle: watchList.title,
@@ -73,6 +80,18 @@ function AdminExperimentAddWindow({
   };
 
   const handleSubmit = async () => {
+    // set commercial youtube id
+    const watchListIdx = watchLists.findIndex(
+      (watchList) => formData.watchListId === watchList.id
+    );
+    const watchList = watchLists[watchListIdx];
+    console.log(watchListIdx);
+
+    formData.commercialYoutubeId =
+      formData.commercialSimilarityLevel === "LOW"
+        ? watchList.lowSimilarity[0].commercialYoutubeId
+        : watchList.highSimilarity[0].commercialYoutubeId;
+
     const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment`;
     const response = await fetch(url, {
       method: "POST",
@@ -215,7 +234,6 @@ function AdminExperimentAddWindow({
                 }}
               >
                 <option value={SimilarityLevels.LOW}>Low</option>
-                <option value={SimilarityLevels.MEDIUM}>Medium</option>
                 <option value={SimilarityLevels.HIGH}>High</option>
               </select>
             </div>
