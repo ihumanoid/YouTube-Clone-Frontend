@@ -205,7 +205,6 @@ function AdminExperimentEditWindow({
                 name="selectOption"
                 className="text-black w-22"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setFormData({
                     ...formData,
                     commercialSimilarityLevel: e.target.value,

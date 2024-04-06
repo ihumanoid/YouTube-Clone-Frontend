@@ -26,7 +26,6 @@ function EVideoPlayer({
   const [prevPlayedSeconds, setPrevPlayedSeconds] = useState(0);
   const [hideWatchOnYouTube, setHideWatchOnYouTube] = useState(true);
   const [playing, setPlaying] = useState(false);
-  const [uninitialized, setUninitialized] = useState(true);
 
   // Video Data
   const [liked, setLiked] = useState(false);
@@ -34,7 +33,6 @@ function EVideoPlayer({
   const [watchTime, setWatchTime] = useState(0);
   const [numSkipsAhead, setNumSkipsAhead] = useState(0);
   const [numSkipsBehind, setNumSkipsBehind] = useState(0);
-  const [showPauseWindow, setShowPauseWindow] = useState(false);
 
   const handleProgress = (progress: any) => {
     if (progress.playedSeconds > 0.01) {
@@ -63,21 +61,6 @@ function EVideoPlayer({
     setPrevPlayedSeconds(progress.playedSeconds);
   };
 
-  // const handlePlay = () => {
-  //   window.clearTimeout(pauseTimeoutRef.current);
-  //   setPlaying(true);
-  //   setShowPauseWindow(false);
-  //   setUninitialized(false);
-  // };
-
-  // const handlePause = () => {
-  //   window.clearTimeout(pauseTimeoutRef.current);
-  //   pauseTimeoutRef.current = window.setTimeout(() => {
-  //     setPlaying(false);
-  //     setShowPauseWindow(true);
-  //   }, 600);
-  // };
-
   const handleLike = () => {
     if (liked) {
       setLiked(false);
@@ -99,6 +82,12 @@ function EVideoPlayer({
     // console.log(
     //   `liked=${liked} disliked=${disliked} numSkipsAhead=${numSkipsAhead} numSkipsBehind=${numSkipsBehind} watchTime=${watchTime}`
     // );
+    setLiked(false);
+    setDisliked(false);
+    setNumSkipsAhead(0);
+    setNumSkipsBehind(0);
+    setWatchTime(0);
+    setPrevPlayedSeconds(0);
     updateVideoData(watchTime, numSkipsAhead, numSkipsBehind, liked, disliked);
   };
 
@@ -254,7 +243,6 @@ function EVideoPlayer({
           youtube: {
             playerVars: {
               autoplay: 1,
-              // disablekb: 1, // Disable keyboard controls
               fs: 0, // Disable full screen
             },
           },
