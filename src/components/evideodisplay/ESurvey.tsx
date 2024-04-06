@@ -1,6 +1,6 @@
 "use client";
 import { SurveyDataDTO } from "@/utils/YouTubeTypes";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface ESurveyProps {
   experimentId: string;
@@ -16,6 +16,17 @@ const ESurvey = ({ experimentId }: ESurveyProps) => {
     seenAdvertisement: false,
   });
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const checkSurvey = async () => {
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/user/experiment/checkSurvey?experimentId=${experimentId}`;
+      const response = await fetch(url);
+      const json = await response.json();
+      const surveyExists = json.data;
+      setSuccess(surveyExists);
+    };
+    checkSurvey();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

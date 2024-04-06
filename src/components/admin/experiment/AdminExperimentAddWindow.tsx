@@ -85,7 +85,6 @@ function AdminExperimentAddWindow({
       (watchList) => formData.watchListId === watchList.id
     );
     const watchList = watchLists[watchListIdx];
-    console.log(watchListIdx);
 
     formData.commercialYoutubeId =
       formData.commercialSimilarityLevel === "LOW"
@@ -226,7 +225,6 @@ function AdminExperimentAddWindow({
                 name="selectOption"
                 className="text-black w-22"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setFormData({
                     ...formData,
                     commercialSimilarityLevel: e.target.value,

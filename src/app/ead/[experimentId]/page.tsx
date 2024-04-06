@@ -67,8 +67,6 @@ function Page({ params }: { params: { experimentId: string } }) {
     router.push(`/evideo/${experimentData.id}`);
   };
 
-  console.log(experimentData.skipEnabled);
-
   return (
     <EAdPlayer
       youtubeId={experimentData.commercialYoutubeId}

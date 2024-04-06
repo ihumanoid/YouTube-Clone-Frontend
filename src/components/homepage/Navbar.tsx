@@ -20,7 +20,6 @@ function Navbar() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    console.log("On key down");
     if (e.key === "Enter" && keyword.length > 0) {
       handleSearch();
     }
