@@ -235,7 +235,7 @@ function EVideoPlayer({
   };
 
   return (
-    <div className="w-full h-full min-h-full flex justify-center items-center max-w-full">
+    <div className="w-full h-full min-h-full flex justify-center items-center max-w-full max-md:mb-40">
       {getHideElements()}
       <ReactPlayer
         ref={reactPlayerRef}

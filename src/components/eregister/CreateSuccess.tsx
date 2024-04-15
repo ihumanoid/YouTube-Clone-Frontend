@@ -34,7 +34,7 @@ function CreateSuccess({ experimentId, watchList }: CreateSuccessProps) {
             <p className="text-gray-400 text-sm">{watchList.length} videos</p>
           </div>
           <div className="flex px-4 gap-4 justify-between items-center">
-            <div className="flex flex-1 overflow-scroll max-lg:max-w-[400px] max-w-[800px] gap-x-4">
+            <div className="flex flex-1 overflow-scroll max-md:max-w-[200px] max-lg:max-w-[400px] max-w-[800px] gap-x-4">
               {watchList.videos.map((video, idx) => {
                 return (
                   <div
