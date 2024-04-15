@@ -95,8 +95,10 @@ function EVideoPlayer({
     return (
       <div>
         {/* Block Top Section with Likes & DisLikes */}
-        <div className="absolute w-full h-[88px] top-0 right-0 transparent bg-black flex justify-between items-center px-4">
-          <div className="text-2xl w-1/2 line-clamp-1">{videoTitle}</div>
+        <div className="absolute w-screen h-[88px] max-md:h-[70px] top-0 right-0 transparent bg-black flex justify-between items-center px-4 max-md:px-2">
+          <div className="text-2xl w-1/2 line-clamp-1">
+            {videoTitle || "Unknown Title"}
+          </div>
           <div>
             <button className="cursor-pointer px-4 py-2 text-white rounded focus:outline-none hover:text-[#B9B9B9]">
               <svg
@@ -235,29 +237,27 @@ function EVideoPlayer({
   };
 
   return (
-    <div className="w-screen h-screen min-h-screen max-md:mb-40 bg-black">
-      <div className="w-full h-full min-h-full justify-center items-center max-w-full">
-        {getHideElements()}
-        <ReactPlayer
-          ref={reactPlayerRef}
-          config={{
-            youtube: {
-              playerVars: {
-                autoplay: 1,
-                fs: 0, // Disable full screen
-              },
+    <div className="w-full h-full min-h-full justify-center items-center max-w-full">
+      {getHideElements()}
+      <ReactPlayer
+        ref={reactPlayerRef}
+        config={{
+          youtube: {
+            playerVars: {
+              autoplay: 1,
+              fs: 0, // Disable full screen
             },
-          }}
-          controls={true}
-          width="100%"
-          height="100%"
-          url={`https://www.youtube.com/shorts/${youtubeId}`}
-          onProgress={handleProgress}
-          onEnded={handleEnd}
-          playing={playing}
-          onDuration={(d) => setWatchTime(d)}
-        />
-      </div>
+          },
+        }}
+        controls={true}
+        width="100%"
+        height="100%"
+        url={`https://www.youtube.com/shorts/${youtubeId}`}
+        onProgress={handleProgress}
+        onEnded={handleEnd}
+        playing={playing}
+        onDuration={(d) => setWatchTime(d)}
+      />
     </div>
   );
 }
