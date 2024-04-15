@@ -95,11 +95,9 @@ function EVideoPlayer({
     return (
       <div>
         {/* Block Top Section with Likes & DisLikes */}
-        <div className="absolute w-screen h-[88px] max-md:h-[70px] top-0 right-0 transparent bg-black flex justify-between items-center px-4 max-md:px-2">
-          <div className="text-2xl w-1/2 line-clamp-1">
-            {videoTitle || "Unknown Title"}
-          </div>
-          <div>
+        <div className="absolute w-screen h-[88px] max-md:h-[80px] top-0 right-0 transparent bg-black flex justify-between items-center px-4 max-md:px-2">
+          <div className="text-2xl w-1/2 line-clamp-1">{videoTitle}</div>
+          {/* <div>
             <button className="cursor-pointer px-4 py-2 text-white rounded focus:outline-none hover:text-[#B9B9B9]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +130,7 @@ function EVideoPlayer({
                 )}
               </svg>
             </button>
-          </div>
+          </div> */}
         </div>
         {/* Block Watch On Youtube */}
         {hideWatchOnYouTube && (
