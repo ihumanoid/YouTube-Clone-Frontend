@@ -219,7 +219,7 @@ function EVideoPlayer({
           </div>
         </div> */}
         {/* Block Bottm Right Tool Buttons */}
-        <div className="group absolute w-24 h-10 right-0 bottom-0 z-10 flex justify-center items-center gap-10">
+        <div className="group absolute w-24 h-10 right-0 bottom-0 z-10 flex justify-center items-center gap-10 max-sm:w-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
