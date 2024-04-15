@@ -95,9 +95,11 @@ function EVideoPlayer({
     return (
       <div>
         {/* Block Top Section with Likes & DisLikes */}
-        <div className="absolute w-screen h-[88px] max-md:h-[80px] top-0 right-0 transparent bg-black flex justify-between items-center px-4 max-md:px-2">
-          <div className="text-2xl w-1/2 line-clamp-1">{videoTitle}</div>
-          {/* <div>
+        <div className="absolute w-screen h-[88px] top-0 right-0 transparent bg-black flex justify-between items-center px-4 max-md:px-2">
+          <div className="text-2xl w-1/2 line-clamp-1 text-white">
+            {videoTitle}
+          </div>
+          <div>
             <button className="cursor-pointer px-4 py-2 text-white rounded focus:outline-none hover:text-[#B9B9B9]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +132,7 @@ function EVideoPlayer({
                 )}
               </svg>
             </button>
-          </div> */}
+          </div>
         </div>
         {/* Block Watch On Youtube */}
         {hideWatchOnYouTube && (
@@ -217,7 +219,7 @@ function EVideoPlayer({
           </div>
         </div> */}
         {/* Block Bottm Right Tool Buttons */}
-        <div className="group absolute w-52 h-10 right-0 bottom-0 z-10 flex justify-center items-center gap-10">
+        <div className="group absolute w-24 h-10 right-0 bottom-0 z-10 flex justify-center items-center gap-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
@@ -229,7 +231,7 @@ function EVideoPlayer({
             <path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
           </svg>
         </div>
-        <div className="group absolute w-52 h-20 right-0 bottom-12 z-10 flex justify-center items-center gap-10"></div>
+        <div className="group absolute w-24 h-10 right-0 bottom-12 z-10 flex justify-center items-center gap-10"></div>
       </div>
     );
   };
