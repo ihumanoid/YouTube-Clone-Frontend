@@ -53,10 +53,10 @@ function Welcome({
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="bg-gray-700 p-10 rounded-lg">
-        <div className="text-3xl text-center mb-8">
+        <div className="text-3xl text-center text-white mb-8">
           Welcome! You are invited to watch some fun YouTube shorts.
         </div>
-        <label className="text-lg">Please enter your email:</label>
+        <label className="text-white text-lg">Please enter your email:</label>
         <input
           type="email"
           value={email}
