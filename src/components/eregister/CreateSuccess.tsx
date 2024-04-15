@@ -25,12 +25,12 @@ function CreateSuccess({ experimentId, watchList }: CreateSuccessProps) {
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="bg-gray-700 px-10 py-4 rounded-lg">
-        <div className="text-2xl text-center mb-8">
+        <div className="text-2xl text-center mb-8 text-white">
           You are assigned the following watch list
         </div>
         <div className="bg-[#151515] mx-2 py-2 rounded-sm border-2 border-[#151515]">
           <div className="ml-4 flex items-center gap-2">
-            <p className="text-xl">{watchList.title}</p>
+            <p className="text-xl text-white">{watchList.title}</p>
             <p className="text-gray-400 text-sm">{watchList.length} videos</p>
           </div>
           <div className="flex px-4 gap-4 justify-between items-center">

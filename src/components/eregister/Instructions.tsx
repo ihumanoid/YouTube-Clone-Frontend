@@ -5,7 +5,7 @@ interface InstructionsProps {
 }
 function Instructions({ incrementPageNum }: InstructionsProps) {
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center items-center text-white">
       <div className="bg-gray-700 px-10 py-4 rounded-lg">
         <div className="text-3xl text-center mb-4">Instructions</div>
         <ul className="text-xl flex flex-col gap-2">
