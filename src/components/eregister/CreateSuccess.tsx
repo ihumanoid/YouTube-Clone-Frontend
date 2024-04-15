@@ -23,7 +23,7 @@ function CreateSuccess({ experimentId, watchList }: CreateSuccessProps) {
   }
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="bg-black w-full h-full flex justify-center items-center">
       <div className="bg-gray-700 px-10 py-4 rounded-lg">
         <div className="text-2xl text-center mb-8 text-white">
           You are assigned the following watch list

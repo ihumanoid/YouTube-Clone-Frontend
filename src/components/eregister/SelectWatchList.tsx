@@ -116,7 +116,7 @@ function SelectWatchList({
   };
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="bg-black w-full h-full flex justify-center items-center">
       <div className="bg-gray-700 px-10 py-4 rounded-lg text-white">
         <div className="text-2xl text-center mb-4">
           Among the following topics, which one seems the most interesting to

@@ -51,7 +51,7 @@ function Welcome({
   };
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="bg-black w-full h-full flex justify-center items-center">
       <div className="bg-gray-700 p-10 rounded-lg">
         <div className="text-3xl text-center text-white mb-8">
           Welcome! You are invited to watch some fun YouTube shorts.
