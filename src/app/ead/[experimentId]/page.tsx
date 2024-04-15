@@ -68,12 +68,14 @@ function Page({ params }: { params: { experimentId: string } }) {
   };
 
   return (
-    <EAdPlayer
-      youtubeId={experimentData.commercialYoutubeId}
-      skipEnabled={experimentData.skipEnabled}
-      experimentId={experimentId}
-      updateAdvertisementData={updateAdvertisementData}
-    />
+    <div className="w-full h-full flex justify-center items-center bg-black max-md:pb-28">
+      <EAdPlayer
+        youtubeId={experimentData.commercialYoutubeId}
+        skipEnabled={experimentData.skipEnabled}
+        experimentId={experimentId}
+        updateAdvertisementData={updateAdvertisementData}
+      />
+    </div>
   );
 }
 
