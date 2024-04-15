@@ -235,27 +235,29 @@ function EVideoPlayer({
   };
 
   return (
-    <div className="w-full h-full min-h-full flex justify-center items-center max-w-full max-md:mb-40">
-      {getHideElements()}
-      <ReactPlayer
-        ref={reactPlayerRef}
-        config={{
-          youtube: {
-            playerVars: {
-              autoplay: 1,
-              fs: 0, // Disable full screen
+    <div className="w-screen h-screen min-h-screen max-md:mb-40 bg-black">
+      <div className="w-full h-full min-h-full justify-center items-center max-w-full">
+        {getHideElements()}
+        <ReactPlayer
+          ref={reactPlayerRef}
+          config={{
+            youtube: {
+              playerVars: {
+                autoplay: 1,
+                fs: 0, // Disable full screen
+              },
             },
-          },
-        }}
-        controls={true}
-        width="100%"
-        height="100%"
-        url={`https://www.youtube.com/shorts/${youtubeId}`}
-        onProgress={handleProgress}
-        onEnded={handleEnd}
-        playing={playing}
-        onDuration={(d) => setWatchTime(d)}
-      />
+          }}
+          controls={true}
+          width="100%"
+          height="100%"
+          url={`https://www.youtube.com/shorts/${youtubeId}`}
+          onProgress={handleProgress}
+          onEnded={handleEnd}
+          playing={playing}
+          onDuration={(d) => setWatchTime(d)}
+        />
+      </div>
     </div>
   );
 }
