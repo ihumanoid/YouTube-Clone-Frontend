@@ -25,7 +25,7 @@ function EVideoPlayer({
   const reactPlayerRef = useRef<ReactPlayer>(null);
   const [prevPlayedSeconds, setPrevPlayedSeconds] = useState(0);
   const [hideWatchOnYouTube, setHideWatchOnYouTube] = useState(true);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
 
   // Video Data
   const [liked, setLiked] = useState(false);
@@ -88,6 +88,7 @@ function EVideoPlayer({
     setNumSkipsBehind(0);
     setWatchTime(0);
     setPrevPlayedSeconds(0);
+    setPlaying(true);
     updateVideoData(watchTime, numSkipsAhead, numSkipsBehind, liked, disliked);
   };
 
