@@ -123,8 +123,9 @@ function Page({ params }: { params: { experimentId: string } }) {
   ) {
     handleDoneWatching();
     return (
-      <div className="w-full h-full flex justify-center items-center text-center text-3xl bg-black">
-        Session complete. Thank you for your participation!
+      <div className="w-full h-full flex justify-center items-center text-center text-3xl bg-black text-white">
+        Session complete. Thank you for your participation! You can close this
+        window.
       </div>
     );
   }
