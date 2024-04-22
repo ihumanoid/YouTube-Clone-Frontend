@@ -19,7 +19,7 @@ function EAdPlayer({
   const reactPlayerRef = useRef<ReactPlayer>(null);
   const pauseTimeoutRef = useRef(-1);
   const [hideWatchOnYouTube, setHideWatchOnYouTube] = useState(true);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const [uninitialized, setUninitialized] = useState(true);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(0);
